@@ -1,0 +1,22 @@
+model TechnicianAssignment {
+    id String @id @default(uuid())
+
+    emergencyOutage_id String
+    technician_id      String
+
+    assignedBy String
+
+    assignedAt DateTime?
+    acceptedAt DateTime?
+
+    completedAt DateTime?
+    status      TechnicianAssignmentStatus?
+
+    rejectReason String?
+
+    emergencyOutage EmergencyOutage @relation(fields: [emergencyOutage_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    technician      Technician      @relation(fields: [technician_id], references: [id])
+    powerOperator   PowerOperator   @relation(fields: [assignedBy], references: [id])
+
+    @@map("technicianAssignments")
+}

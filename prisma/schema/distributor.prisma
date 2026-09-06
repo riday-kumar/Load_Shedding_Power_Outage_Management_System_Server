@@ -1,0 +1,13 @@
+model Distributor {
+    id           String @id @default(ulid())
+    company_name String
+
+    createdAt           DateTime             @default(now())
+    updatedAt           DateTime             @updatedAt
+    distributorManagers DistributorManager[]
+
+    substations        Substation[]
+    powerDistributions PowerDistribution?
+
+    @@map("distributors")
+}

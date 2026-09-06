@@ -1,0 +1,26 @@
+model LoadSheddingSchedule {
+    id String @id @default(uuid())
+
+    feeder_id        String
+    powerOperator_id String
+
+    date       DateTime @default(now())
+    start_time String
+    end_time   String
+    reason     String?
+
+    status LoadSheddingStatus @default(Draft)
+
+    plannedLoadShedding Decimal
+
+    approvedById String @unique
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    feeders           Feeder             @relation(fields: [feeder_id], references: [id], onDelete: Cascade)
+    powerOperator     PowerOperator      @relation(fields: [powerOperator_id], references: [id])
+    distibutorManager DistributorManager @relation(fields: [approvedById], references: [id])
+
+    @@map("loadSheddingSchedules")
+}

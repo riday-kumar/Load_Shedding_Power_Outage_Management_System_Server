@@ -1,0 +1,51 @@
+enum AuthProvider {
+    GOOGLE
+    CREDENTIAL
+}
+
+enum UserStatus {
+    ACTIVE
+    BLOCK
+}
+
+enum Role {
+    ADMIN
+    POWER_AUTH
+    DISTRIBUTOR_MANAGER
+    POWER_OPERATOR
+    TECHNICIAN
+    CUSTOMER
+}
+
+enum TechnicianStatus {
+    AVAILABLE
+    ENGAGED
+    UNAVAILABLE
+}
+
+enum EmergencyOutageStatus {
+    Reported
+    Verified
+    TECHNICIAN_ASSIGNED
+    UNDER_REPAIR
+    Resolved
+}
+
+enum LoadSheddingStatus {
+    Draft
+    Pending
+    Approved
+    Published
+    Rejected
+    Completed
+}
+
+enum TechnicianAssignmentStatus {
+    Accepted
+    Rejected
+    Traveling
+    On_Site
+    InProgress
+    Cancelled
+    Completed
+}

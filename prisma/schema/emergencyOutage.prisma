@@ -1,0 +1,19 @@
+model EmergencyOutage {
+    id          String                @id @default(uuid())
+    feeder_id   String
+    reporter_id String                @unique
+    reportedAt  DateTime              @default(now())
+    reason      String?
+    startedAt   String?
+    resolvedAt  String?
+    status      EmergencyOutageStatus @default(Reported)
+    damage      String?
+
+    feeders Feeder @relation(fields: [feeder_id], references: [id], onDelete: Cascade)
+    users   User   @relation(fields: [reporter_id], references: [id], onDelete: Cascade)
+
+    updatedAt             DateTime               @updatedAt
+    technicianAssignments TechnicianAssignment[]
+
+    @@map("emergency_outages")
+}

@@ -1,0 +1,12 @@
+model PowerOperator {
+    id            String     @id @default(uuid())
+    substation_id String
+    substation    Substation @relation(fields: [substation_id], references: [id])
+
+    user_id               String                 @unique
+    users                 User                   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    loadSheddingSchedules LoadSheddingSchedule[]
+    technicianAssignments TechnicianAssignment[]
+
+    @@map("powerOperators")
+}

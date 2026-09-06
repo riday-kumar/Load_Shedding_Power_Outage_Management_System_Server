@@ -1,0 +1,8 @@
+model Technician {
+    id                    String                 @id @default(uuid())
+    status                TechnicianStatus       @default(AVAILABLE)
+    skill                 String?
+    user_id               String                 @unique
+    users                 User                   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    technicianAssignments TechnicianAssignment[]
+}
