@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Welcome</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f4f7fb;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .header {
+        background: #2563eb;
+        color: white;
+        text-align: center;
+        padding: 32px 20px;
+      }
+
+      .content {
+        padding: 32px 24px;
+        color: #374151;
+        line-height: 1.7;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 12px 24px;
+        background: #2563eb;
+        color: white !important;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        margin: 24px 0;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 12px;
+        color: #9ca3af;
+        background: #f9fafb;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Welcome to <%= appName %> 🎉</h1>
+        <p>Your account has been created successfully</p>
+      </div>
+
+      <div class="content">
+        <h2>Hi, <%= name %> 👋</h2>
+
+        <p>
+          Thank you for joining <strong><%= appName %></strong>. We're excited
+          to have you as part of our community.
+        </p>
+
+        <p>You can now log in and start exploring all of our features.</p>
+
+        <!-- <a href="<%= loginUrl %>" class="button"> Login to Your Account </a> -->
+
+        <p>If you didn't create this account, please ignore this email.</p>
+
+        <p>Best regards,<br /><strong>The <%= appName %> Team</strong></p>
+      </div>
+
+      <div class="footer">
+        © <%= year %> <%= appName %>. All rights reserved.
+      </div>
+    </div>
+  </body>
+</html>

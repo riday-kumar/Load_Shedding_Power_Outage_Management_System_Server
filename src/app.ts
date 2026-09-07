@@ -6,6 +6,7 @@ import { notFound } from "./app/middlewares/notFound";
 import { sendResponse } from "./app/utility/sendResponse";
 import httpStatus from "http-status";
 import config from "./app/config";
+import { AuthRoutes } from "./app/module/auth/auth.route";
 
 const app: Application = express();
 
@@ -22,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cookieParser());
+
+app.use("/api/v1/auth", AuthRoutes);
 
 // basic route
 app.get("/", (req: Request, res: Response) => {
