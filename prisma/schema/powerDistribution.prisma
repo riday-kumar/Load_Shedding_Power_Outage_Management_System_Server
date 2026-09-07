@@ -1,11 +1,14 @@
 model PowerDistribution {
-    id            String   @id @default(uuid())
-    date          DateTime @default(now())
+    id          String   @id @default(uuid())
+    allocatedAt DateTime @default(now())
+
     expected_need Decimal
     allocated     Decimal
 
-    distributor_id String      @unique
+    distributor_id String
     distributor    Distributor @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    substationAllocations SubstationPowerAllocation[]
 
     @@map("power_distributors")
 }

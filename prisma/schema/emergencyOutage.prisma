@@ -1,7 +1,7 @@
 model EmergencyOutage {
     id          String                @id @default(uuid())
     feeder_id   String
-    reporter_id String                @unique
+    reporter_id String
     reportedAt  DateTime              @default(now())
     reason      String?
     startedAt   String?

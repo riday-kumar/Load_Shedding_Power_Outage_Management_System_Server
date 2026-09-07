@@ -13,7 +13,7 @@ model LoadSheddingSchedule {
 
     plannedLoadShedding Decimal
 
-    approvedById String @unique
+    approvedById String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

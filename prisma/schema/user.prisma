@@ -3,10 +3,10 @@ model User {
     name     String
     email    String  @unique
     phone    String? @unique @db.VarChar(11)
-    address  String
+    address  String?
     password String?
 
-    googleId     String?
+    googleId     String?      @unique
     authProvider AuthProvider @default(CREDENTIAL)
 
     emailVerified Boolean    @default(false)
@@ -23,11 +23,13 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    distributorManager DistributorManager?
-    substations        Substation[]
-    powerOperators     PowerOperator?
-    technicians        Technician?
-    emergencyOutages   EmergencyOutage?
+    distributorManager         DistributorManager?
+    substations                Substation[]                @relation("SubstationCreatedBy")
+    powerOperators             PowerOperator?
+    technicians                Technician?
+    emergencyOutages           EmergencyOutage[]
+    nationalPowerStatuses      NationalPowerStatus[]
+    substationPowerAllocations SubstationPowerAllocation[]
 
     @@map("users")
 }

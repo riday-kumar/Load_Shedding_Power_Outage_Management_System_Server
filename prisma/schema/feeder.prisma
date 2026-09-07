@@ -3,13 +3,13 @@ model Feeder {
     feeder_name   String
     area          String
     substation_id String
-    manager_id    String
 
-    substations        Substation         @relation(fields: [substation_id], references: [id])
-    distributorManager DistributorManager @relation(fields: [manager_id], references: [id])
+    substation Substation @relation(fields: [substation_id], references: [id])
 
     createdAt             DateTime               @default(now())
     updatedAt             DateTime               @updatedAt
     emergencyOutages      EmergencyOutage[]
     loadSheddingSchedules LoadSheddingSchedule[]
+
+    @@map("feeders")
 }

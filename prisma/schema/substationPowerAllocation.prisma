@@ -1,15 +1,21 @@
 model SubstationPowerAllocation {
     id            String   @id @default(ulid())
     substation_id String
-    date          DateTime @default(now())
-    expectedNeed  Decimal?
-    allocatedNeed Decimal?
-    createdBy     String
+    allocationAt  DateTime @default(now())
+
+    expectedNeed  Decimal
+    allocatedNeed Decimal
+
+    createdById String
+    createdBy   User   @relation(fields: [createdById], references: [id])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    substations Substation @relation(fields: [substation_id], references: [id], onDelete: Cascade)
+    substation Substation @relation(fields: [substation_id], references: [id], onDelete: Cascade)
+
+    powerDistributionId String?
+    powerDistribution   PowerDistribution? @relation(fields: [powerDistributionId], references: [id])
 
     @@map("substationPowerAllocations")
 }
