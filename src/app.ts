@@ -7,6 +7,7 @@ import { sendResponse } from "./app/utility/sendResponse";
 import httpStatus from "http-status";
 import config from "./app/config";
 import { AuthRoutes } from "./app/module/auth/auth.route";
+import { AdminRoutes } from "./app/module/admin/admin.route";
 
 const app: Application = express();
 
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/v1/auth", AuthRoutes);
+app.use("/api/v1/admin", AdminRoutes);
 
 // basic route
 app.get("/", (req: Request, res: Response) => {
