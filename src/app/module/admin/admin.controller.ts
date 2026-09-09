@@ -40,8 +40,27 @@ const createDistributorManager = catchAsync(
   },
 );
 
+export const allUsers = catchAsync(async (req: Request, res: Response) => {
+  let payload;
+
+  if (req.query.role) {
+    payload = req.query.role as string;
+  } else {
+    payload = null;
+  }
+
+  const users = await adminService.allUsers(payload);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "All users retrieved successfully",
+    data: users,
+  });
+});
+
 export const adminController = {
   createPowerAuthority,
   createDistributor,
   createDistributorManager,
+  allUsers,
 };

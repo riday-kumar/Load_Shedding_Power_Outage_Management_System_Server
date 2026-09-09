@@ -115,8 +115,21 @@ const createDistributorManager = async (payload: ICreateDistributorManager) => {
   return distributorManager;
 };
 
+const allUsers = async (payload: string | null) => {
+  const users = await prisma.user.findMany({
+    where: {
+      role: Role[payload as keyof typeof Role],
+    },
+    omit: {
+      password: true,
+    },
+  });
+  return users;
+};
+
 export const adminService = {
   createPowerAuthority,
   createDistributor,
   createDistributorManager,
+  allUsers,
 };

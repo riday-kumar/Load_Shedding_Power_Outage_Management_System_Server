@@ -8,6 +8,7 @@ import httpStatus from "http-status";
 import config from "./app/config";
 import { AuthRoutes } from "./app/module/auth/auth.route";
 import { AdminRoutes } from "./app/module/admin/admin.route";
+import { PowerAuthRoutes } from "./app/module/power-auth/power-auth.route";
 
 const app: Application = express();
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/admin", AdminRoutes);
+app.use("/api/v1/power-auth", PowerAuthRoutes);
 
 // basic route
 app.get("/", (req: Request, res: Response) => {

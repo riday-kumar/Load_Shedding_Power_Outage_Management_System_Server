@@ -24,5 +24,11 @@ router.post(
   validateRequest(adminValidation.CreateDistributorManagerSchema),
   adminController.createDistributorManager,
 );
+router.get(
+  "/all-users",
+  auth(Role.ADMIN),
+  adminController.allUsers,
+  adminController.allUsers,
+);
 
 export const AdminRoutes = router;
