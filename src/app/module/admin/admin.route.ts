@@ -30,5 +30,10 @@ router.get(
   adminController.allUsers,
   adminController.allUsers,
 );
+router.get(
+  "/all-distributor-managers",
+  auth(Role.ADMIN),
+  adminController.allDistributorManager,
+);
 
 export const AdminRoutes = router;

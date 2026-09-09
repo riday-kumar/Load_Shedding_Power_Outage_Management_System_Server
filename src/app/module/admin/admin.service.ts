@@ -133,9 +133,35 @@ const allUsers = async (payload: string | null) => {
   return users;
 };
 
+const allDistributors = async () => {
+  const distributors = await prisma.distributor.findMany();
+  return distributors;
+};
+
+const allDistributorManager = async () => {
+  const distributorsManager = await prisma.user.findMany({
+    where: {
+      role: Role.DISTRIBUTOR_MANAGER,
+    },
+    omit: {
+      password: true,
+    },
+    include: {
+      distributorManager: {
+        include: {
+          distributor: true,
+        },
+      },
+    },
+  });
+  return distributorsManager;
+};
+
 export const adminService = {
   createPowerAuthority,
   createDistributor,
   createDistributorManager,
   allUsers,
+  allDistributors,
+  allDistributorManager,
 };
