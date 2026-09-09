@@ -16,6 +16,9 @@ router.post(
   validateRequest(authValidation.EmailVerifyZodSchema),
   authController.verifyUserEmail,
 );
+
+router.post("/login", authController.loginUser);
+
 router.post("/google", authController.googleLogin);
 
 export const AuthRoutes = router;
