@@ -6,7 +6,7 @@ model EmergencyOutage {
     reason      String?
     startedAt   String?
     resolvedAt  String?
-    status      EmergencyOutageStatus @default(Reported)
+    status      EmergencyOutageStatus @default(REPORTED)
     damage      String?
 
     feeders Feeder @relation(fields: [feeder_id], references: [id], onDelete: Cascade)

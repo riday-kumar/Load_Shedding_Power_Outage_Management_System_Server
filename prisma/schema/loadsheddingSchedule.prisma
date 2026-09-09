@@ -9,7 +9,7 @@ model LoadSheddingSchedule {
     end_time   String
     reason     String?
 
-    status LoadSheddingStatus @default(Draft)
+    status LoadSheddingStatus @default(DRAFT)
 
     plannedLoadShedding Decimal
 

@@ -26,6 +26,14 @@ const config = {
   jwt_refresh_secret: process.env.JWT_REFRESH_SECRET!,
   jwt_access_token_expire: process.env.JWT_ACCESS_EXPIRES_IN!,
   jwt_refresh_token_expire: process.env.JWT_REFRESH_EXPIRES_IN!,
+
+  bcrypt_salt_round: process.env.BCRYPT_SALT_ROUND!,
+
+  redis_user: process.env.REDIS_USER!,
+  redis_password: process.env.REDIS_PASSWORD!,
+  redis_host: process.env.REDIS_HOST!,
+  redis_port: process.env.REDIS_PORT!,
+  otp_expiry: process.env.OTP_EXPIRY!,
 };
 
 export default config;
