@@ -15,6 +15,7 @@ interface ICreateDistributorManager {
   name: string;
   email: string;
   password: string;
+  distributor_id: string;
 }
 
 interface ICreateDistributor {
@@ -80,7 +81,7 @@ const createDistributor = async (payload: ICreateDistributor) => {
 };
 
 const createDistributorManager = async (payload: ICreateDistributorManager) => {
-  const { name, password } = payload;
+  const { name, password, distributor_id } = payload;
   const email = payload.email.trim().toLowerCase();
 
   const isManagerExists = await prisma.user.findUnique({
@@ -106,6 +107,11 @@ const createDistributorManager = async (payload: ICreateDistributorManager) => {
       password: hashedPassword,
       emailVerified: true,
       role: Role.DISTRIBUTOR_MANAGER,
+      distributorManager: {
+        create: {
+          distributor_id,
+        },
+      },
     },
 
     omit: {
