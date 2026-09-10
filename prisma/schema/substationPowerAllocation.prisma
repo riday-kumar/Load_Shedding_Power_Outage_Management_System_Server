@@ -1,7 +1,7 @@
 model SubstationPowerAllocation {
     id            String   @id @default(ulid())
     substation_id String
-    allocationAt  DateTime @default(now())
+    allocationAt  DateTime @db.Date
 
     expectedNeed  Decimal
     allocatedNeed Decimal

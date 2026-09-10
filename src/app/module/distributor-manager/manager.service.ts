@@ -18,6 +18,12 @@ interface createPowerOperatorPayload {
   substation_id: string;
 }
 
+interface ISubstationPowerDistribution {
+  substation_id: string;
+  expectedNeed: number;
+  allocatedNeed: number;
+}
+
 const createSubstation = async (
   payload: createSubstationPayload,
   userId: string,
@@ -131,7 +137,108 @@ const createPowerOperator = async (
   return newPowerOperator;
 };
 
+const powerAllocateIntoSubstation = async (
+  payload: ISubstationPowerDistribution[],
+  distributor_company_id: string,
+  userId: string,
+) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const todaysAllocatedPower = await prisma.powerDistribution.findFirst({
+    where: {
+      distributor_id: distributor_company_id,
+      allocatedAt: today,
+    },
+  });
+
+  if (!todaysAllocatedPower) {
+    throw new AppError(httpStatus.CONFLICT, "Power not allocated for today");
+  }
+
+  const isSubstationPowerAllocated =
+    await prisma.substationPowerAllocation.findFirst({
+      where: {
+        allocationAt: today,
+      },
+    });
+
+  if (isSubstationPowerAllocated) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "Power already allocated to the sub stations for today",
+    );
+  }
+
+  const aboutManager = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      distributorManager: true,
+    },
+  });
+
+  // see total substations
+  const totalSubstations = await prisma.substation.count({
+    where: {
+      distributor_id: aboutManager?.distributorManager?.distributor_id,
+    },
+  });
+
+  if (payload.length !== totalSubstations) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "Power distribution not match with sub stations",
+    );
+  }
+
+  const totalGivenByPowerAuth = Number(todaysAllocatedPower.allocated);
+  const totalAllocatedByManager = payload.reduce(
+    (acc, cur) => acc + cur.allocatedNeed,
+    0,
+  );
+
+  if (totalAllocatedByManager > totalGivenByPowerAuth) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "Power distribution not match with allocated power",
+    );
+  }
+
+  const seenSubstationIds = new Set<string>();
+  const duplicateSubstationIds = payload.filter((data) => {
+    if (seenSubstationIds.has(data.substation_id)) {
+      return true;
+    }
+    seenSubstationIds.add(data.substation_id);
+    return false;
+  });
+
+  if (duplicateSubstationIds.length > 0) {
+    throw new AppError(httpStatus.CONFLICT, "Duplicate substation ids");
+  }
+
+  const singleData = payload.map((data) => ({
+    substation_id: data.substation_id,
+    allocationAt: today,
+
+    expectedNeed: data.expectedNeed,
+    allocatedNeed: data.allocatedNeed,
+
+    createdById: userId,
+  }));
+
+  const powerDistributeToSubstation =
+    await prisma.substationPowerAllocation.createMany({
+      data: singleData,
+    });
+
+  return powerDistributeToSubstation;
+};
+
 export const distributorManagerService = {
   createSubstation,
   createPowerOperator,
+  powerAllocateIntoSubstation,
 };

@@ -36,7 +36,27 @@ const createPowerOperator = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const powerAllocateIntoSubstation = catchAsync(
+  async (req: Request, res: Response) => {
+    const payload = req.body;
+    const userId = req.user?.userId as string;
+    const result = await distributorManagerService.powerAllocateIntoSubstation(
+      payload,
+      req.params.distributor_company_id as string,
+      userId,
+    );
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Power allocated to the substations successfully",
+      data: result,
+    });
+  },
+);
+
 export const distributorManagerController = {
   createSubstation,
   createPowerOperator,
+  powerAllocateIntoSubstation,
 };

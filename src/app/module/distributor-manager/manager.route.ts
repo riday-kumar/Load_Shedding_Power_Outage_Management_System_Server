@@ -21,4 +21,10 @@ router.post(
   distributorManagerController.createPowerOperator,
 );
 
+router.post(
+  "/power-allocate-into-substation",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  distributorManagerController.powerAllocateIntoSubstation,
+);
+
 export const DistributorManagerRoutes = router;
