@@ -3,6 +3,8 @@ model PowerOperator {
     substation_id String
     substation    Substation @relation(fields: [substation_id], references: [id])
 
+    createdById String
+
     user_id               String                 @unique
     user                  User                   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     loadSheddingSchedules LoadSheddingSchedule[]

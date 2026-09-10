@@ -17,6 +17,7 @@ router.post(
 router.post(
   "/power-distribution",
   auth(Role.POWER_AUTH),
+  validateRequest(powerAuthValidation.createPowerDistributionSchema),
   powerAuthController.powerDistribution,
 );
 
