@@ -21,6 +21,19 @@ const nationalLevelElectricity = catchAsync(
     });
   },
 );
+
+const powerDistribution = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+  const result = await powerAuthServices.powerDistribution(payload);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Power distribution created successfully",
+    data: result,
+  });
+});
+
 export const powerAuthController = {
   nationalLevelElectricity,
+  powerDistribution,
 };

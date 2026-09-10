@@ -1,6 +1,6 @@
 model NationalPowerStatus {
     id               String   @id @default(uuid())
-    date             DateTime @default(now())
+    date             DateTime @db.Date
     generatedPowerMW Decimal
     demand           Decimal
     createdById      String

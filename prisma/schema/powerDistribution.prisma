@@ -1,6 +1,6 @@
 model PowerDistribution {
     id          String   @id @default(uuid())
-    allocatedAt DateTime @default(now())
+    allocatedAt DateTime @db.Date
 
     expected_need Decimal
     allocated     Decimal
@@ -10,5 +10,6 @@ model PowerDistribution {
 
     substationAllocations SubstationPowerAllocation[]
 
+    @@unique([distributor_id, allocatedAt])
     @@map("power_distributors")
 }

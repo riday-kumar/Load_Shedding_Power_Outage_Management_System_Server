@@ -14,4 +14,10 @@ router.post(
   powerAuthController.nationalLevelElectricity,
 );
 
+router.post(
+  "/power-distribution",
+  auth(Role.POWER_AUTH),
+  powerAuthController.powerDistribution,
+);
+
 export const PowerAuthRoutes = router;
