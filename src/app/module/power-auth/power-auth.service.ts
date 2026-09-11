@@ -22,18 +22,11 @@ const nationalLevelElectricity = async (
   const { generatedPowerMW, demand } = payload;
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
 
   // check today's power status already exists or not
   const isTodaysPowerExists = await prisma.nationalPowerStatus.findFirst({
     where: {
-      date: {
-        gte: today,
-        lte: tomorrow,
-      },
+      date: today,
     },
   });
 
@@ -60,19 +53,12 @@ const powerDistribution = async (payload: ICreatePowerDistribution[]) => {
   // console.log("payload", payload);
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
 
   const result = await prisma.$transaction(async (tx) => {
     // check if today has available power
     const todaysAvailablePower = await prisma.nationalPowerStatus.findFirst({
       where: {
-        date: {
-          gte: today,
-          lte: tomorrow,
-        },
+        date: today,
       },
     });
 

@@ -42,7 +42,7 @@ const powerAllocateIntoSubstation = catchAsync(
     const userId = req.user?.userId as string;
     const result = await distributorManagerService.powerAllocateIntoSubstation(
       payload,
-      req.params.distributor_company_id as string,
+      req.query?.distributor_company_id as string,
       userId,
     );
 

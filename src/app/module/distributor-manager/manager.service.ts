@@ -143,7 +143,6 @@ const powerAllocateIntoSubstation = async (
   userId: string,
 ) => {
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
 
   const todaysAllocatedPower = await prisma.powerDistribution.findFirst({
     where: {
@@ -170,6 +169,23 @@ const powerAllocateIntoSubstation = async (
     );
   }
 
+  if (!distributor_company_id) {
+    throw new AppError(httpStatus.NOT_FOUND, "Distributor Company not found!");
+  }
+
+  const isDistributorCompanyExists = await prisma.distributor.findUnique({
+    where: {
+      id: distributor_company_id,
+    },
+  });
+
+  if (!isDistributorCompanyExists) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Distributor Company doesn't exists",
+    );
+  }
+
   const aboutManager = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -187,10 +203,7 @@ const powerAllocateIntoSubstation = async (
   });
 
   if (payload.length !== totalSubstations) {
-    throw new AppError(
-      httpStatus.CONFLICT,
-      "Power distribution not match with sub stations",
-    );
+    throw new AppError(httpStatus.CONFLICT, "sub stations number not matched!");
   }
 
   const totalGivenByPowerAuth = Number(todaysAllocatedPower.allocated);
