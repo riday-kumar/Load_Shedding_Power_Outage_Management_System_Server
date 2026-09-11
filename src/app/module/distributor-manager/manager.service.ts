@@ -24,6 +24,21 @@ interface ISubstationPowerDistribution {
   allocatedNeed: number;
 }
 
+interface ICreateFeederPayload {
+  feeder_name: string;
+  area: string;
+  substation_id: string;
+}
+
+interface createTechnicianPayload {
+  name: string;
+  email: string;
+  address: string;
+  password: string;
+  skill: string;
+  substationId: string;
+}
+
 const createSubstation = async (
   payload: createSubstationPayload,
   userId: string,
@@ -250,8 +265,109 @@ const powerAllocateIntoSubstation = async (
   return powerDistributeToSubstation;
 };
 
+const createFeeder = async (payload: ICreateFeederPayload, userId: string) => {
+  const { feeder_name, area, substation_id } = payload;
+
+  const manager = await prisma.distributorManager.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  if (!manager) {
+    throw new AppError(httpStatus.NOT_FOUND, "Distributor manager not found");
+  }
+
+  const isSubStationExists = await prisma.substation.findUnique({
+    where: {
+      id: substation_id,
+    },
+  });
+
+  if (!isSubStationExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Substation not found");
+  }
+
+  const isFeederExists = await prisma.feeder.findFirst({
+    where: {
+      feeder_name,
+      substation_id,
+    },
+  });
+
+  if (isFeederExists) {
+    throw new AppError(httpStatus.CONFLICT, "Feeder already exist");
+  }
+
+  const newFeeder = await prisma.feeder.create({
+    data: {
+      feeder_name,
+      area,
+      substation_id,
+      createdBy: manager?.id,
+    },
+    include: {
+      substation: true,
+    },
+  });
+  return newFeeder;
+};
+
+const createTechnician = async (
+  payload: createTechnicianPayload,
+  userId: string,
+) => {
+  const { name, email, address, password, skill, substationId } = payload;
+
+  const isTechnicianExists = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (isTechnicianExists) {
+    throw new AppError(httpStatus.CONFLICT, "Technician already exist");
+  }
+
+  const manager = await prisma.distributorManager.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  if (!manager) {
+    throw new AppError(httpStatus.NOT_FOUND, "Distributor manager not found");
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    password,
+    Number(config.bcrypt_salt_round),
+  );
+
+  const newTechnician = await prisma.user.create({
+    data: {
+      name,
+      email,
+      address,
+      emailVerified: true,
+      password: hashedPassword,
+      technicians: {
+        create: {
+          skill,
+          createdBy: manager.id,
+          substationId,
+        },
+      },
+    },
+  });
+
+  return newTechnician;
+};
+
 export const distributorManagerService = {
   createSubstation,
   createPowerOperator,
   powerAllocateIntoSubstation,
+  createFeeder,
+  createTechnician,
 };

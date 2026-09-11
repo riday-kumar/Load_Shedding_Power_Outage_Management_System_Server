@@ -6,6 +6,9 @@ model Feeder {
 
     substation Substation @relation(fields: [substation_id], references: [id])
 
+    createdBy String
+    manager   DistributorManager @relation(fields: [createdBy], references: [id])
+
     createdAt             DateTime               @default(now())
     updatedAt             DateTime               @updatedAt
     emergencyOutages      EmergencyOutage[]

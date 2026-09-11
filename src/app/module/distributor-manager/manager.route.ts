@@ -27,4 +27,18 @@ router.post(
   distributorManagerController.powerAllocateIntoSubstation,
 );
 
+router.post(
+  "/create-feeder",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  validateRequest(distributorManagerValidation.createFeederSchema),
+  distributorManagerController.createFeeder,
+);
+
+router.post(
+  "/create-technician",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  validateRequest(distributorManagerValidation.createTechnicianSchema),
+  distributorManagerController.createTechnician,
+);
+
 export const DistributorManagerRoutes = router;

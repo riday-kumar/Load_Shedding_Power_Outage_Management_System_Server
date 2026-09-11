@@ -55,8 +55,39 @@ const powerAllocateIntoSubstation = catchAsync(
   },
 );
 
+const createFeeder = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+  const userId = req.user?.userId as string;
+  const result = await distributorManagerService.createFeeder(payload, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Feeder created successfully",
+    data: result,
+  });
+});
+
+const createTechnician = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+  const userId = req.user?.userId as string;
+  const result = await distributorManagerService.createTechnician(
+    payload,
+    userId,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Technician created successfully",
+    data: result,
+  });
+});
+
 export const distributorManagerController = {
   createSubstation,
   createPowerOperator,
   powerAllocateIntoSubstation,
+  createFeeder,
+  createTechnician,
 };
