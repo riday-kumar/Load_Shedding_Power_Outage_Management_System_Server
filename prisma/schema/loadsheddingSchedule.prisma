@@ -4,23 +4,23 @@ model LoadSheddingSchedule {
     feeder_id        String
     powerOperator_id String
 
-    date       DateTime @default(now())
-    start_time String
-    end_time   String
+    date       DateTime @db.Date
+    start_time DateTime @db.Time()
+    end_time   DateTime @db.Time()
     reason     String?
 
     status LoadSheddingStatus @default(DRAFT)
 
     plannedLoadShedding Decimal
 
-    approvedById String
+    approvedById String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    feeders           Feeder             @relation(fields: [feeder_id], references: [id], onDelete: Cascade)
-    powerOperator     PowerOperator      @relation(fields: [powerOperator_id], references: [id])
-    distibutorManager DistributorManager @relation(fields: [approvedById], references: [id])
+    feeders       Feeder              @relation(fields: [feeder_id], references: [id], onDelete: Cascade)
+    powerOperator PowerOperator       @relation(fields: [powerOperator_id], references: [id])
+    approvedBy    DistributorManager? @relation(fields: [approvedById], references: [id])
 
     @@map("loadSheddingSchedules")
 }

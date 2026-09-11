@@ -4,12 +4,12 @@ model DistributorManager {
     user_id String @unique
     user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-    distributor_id       String
-    distributor          Distributor            @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    // feeders              Feeder[]
-    loadSheddingSchedule LoadSheddingSchedule[]
-    feeders              Feeder[]
-    technicians          Technician[]
+    distributor_id String
+    distributor    Distributor @relation(fields: [distributor_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    feeders               Feeder[]
+    technicians           Technician[]
+    loadSheddingSchedules LoadSheddingSchedule[]
 
     @@map("distributorManagers")
 }

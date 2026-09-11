@@ -10,6 +10,8 @@ import { AuthRoutes } from "./app/module/auth/auth.route";
 import { AdminRoutes } from "./app/module/admin/admin.route";
 import { PowerAuthRoutes } from "./app/module/power-auth/power-auth.route";
 import { DistributorManagerRoutes } from "./app/module/distributor-manager/manager.route";
+import { PowerOperatorRoutes } from "./app/module/power-operator/power-operator.route";
+import { LoadSheddingRoutes } from "./app/module/load-shedding/load-shedding.route";
 
 const app: Application = express();
 
@@ -31,6 +33,8 @@ app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/admin", AdminRoutes);
 app.use("/api/v1/power-auth", PowerAuthRoutes);
 app.use("/api/v1/distributor-manager", DistributorManagerRoutes);
+app.use("/api/v1/power-operator", PowerOperatorRoutes);
+app.use("/api/v1/load-shedding", LoadSheddingRoutes);
 
 // basic route
 app.get("/", (req: Request, res: Response) => {
