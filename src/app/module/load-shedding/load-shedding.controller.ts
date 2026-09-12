@@ -4,6 +4,19 @@ import { loadSheddingService } from "./load-shedding.service";
 import { sendResponse } from "../../utility/sendResponse";
 import httpStatus from "http-status";
 
+const getLoadSheddingSchedule = catchAsync(
+  async (req: Request, res: Response) => {
+    const allLoadSheddingSchedule =
+      await loadSheddingService.getLoadSheddingSchedule();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Load shedding schedule retrieved successfully",
+      data: allLoadSheddingSchedule,
+    });
+  },
+);
+
 const createLoadSheddingSchedule = catchAsync(
   async (req: Request, res: Response) => {
     const payload = req.body;
@@ -73,9 +86,42 @@ const publishSchedule = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateLoadSheddingSchedule = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params?.id as string;
+    const payload = req.body;
+
+    const updatedSchedule =
+      await loadSheddingService.updateLoadSheddingSchedule(payload, id);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Load shedding schedule updated successfully",
+      data: updatedSchedule,
+    });
+  },
+);
+
+const deleteLoadSheddingSchedule = catchAsync(
+  async (req: Request, res: Response) => {
+    const id = req.params?.id as string;
+
+    await loadSheddingService.deleteLoadSheddingSchedule(id);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Load shedding schedule deleted successfully",
+      data: null,
+    });
+  },
+);
+
 export const loadSheddingController = {
+  getLoadSheddingSchedule,
   createLoadSheddingSchedule,
   approveSchedule,
   rejectSchedule,
   publishSchedule,
+  updateLoadSheddingSchedule,
+  deleteLoadSheddingSchedule,
 };

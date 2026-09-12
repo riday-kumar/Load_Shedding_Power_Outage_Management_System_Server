@@ -6,6 +6,7 @@ import { validateRequest } from "../../middlewares/validateRequest";
 import { LoadSheddingValidationSchema } from "./load-shedding.validation";
 
 const router = Router();
+router.get("/schedule", loadSheddingController.getLoadSheddingSchedule);
 router.post(
   "/schedule",
   auth(Role.POWER_OPERATOR),
@@ -29,6 +30,18 @@ router.patch(
   "/schedule/:id/publish",
   auth(Role.POWER_OPERATOR),
   loadSheddingController.publishSchedule,
+);
+
+router.patch(
+  "/schedule/:id",
+  auth(Role.POWER_OPERATOR),
+  loadSheddingController.updateLoadSheddingSchedule,
+);
+
+router.delete(
+  "/schedule/:id",
+  auth(Role.POWER_OPERATOR),
+  loadSheddingController.deleteLoadSheddingSchedule,
 );
 
 export const LoadSheddingRoutes = router;

@@ -1,11 +1,7 @@
-import path from "path";
-import ejs from "ejs";
 import { LoadSheddingStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
-import config from "../../config";
-import { transporter } from "../../lib/nodemailer";
 
 interface ICreateLoadShedding {
   feeder_id: string;
@@ -14,6 +10,19 @@ interface ICreateLoadShedding {
   reason?: string;
   plannedLoadShedding: number;
 }
+
+const getLoadSheddingSchedule = async () => {
+  const allLoadSheddingSchedule = await prisma.loadSheddingSchedule.findMany({
+    where: {
+      status: LoadSheddingStatus.PUBLISHED,
+    },
+    include: {
+      feeders: true,
+      powerOperator: true,
+    },
+  });
+  return allLoadSheddingSchedule;
+};
 
 const createLoadSheddingSchedule = async (
   payload: ICreateLoadShedding,
@@ -299,9 +308,90 @@ const publishSchedule = async (id: string, userId: string) => {
   return publishSchedule;
 };
 
+const updateLoadSheddingSchedule = async (
+  payload: ICreateLoadShedding,
+  id: string,
+) => {
+  const isScheduleExists = await prisma.loadSheddingSchedule.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      feeders: {
+        include: {
+          manager: true,
+        },
+      },
+    },
+  });
+
+  if (!isScheduleExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Schedule not found");
+  }
+
+  if (
+    isScheduleExists.status === LoadSheddingStatus.PUBLISHED ||
+    isScheduleExists.status === LoadSheddingStatus.APPROVED
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "published or approved schedule cannot be updated",
+    );
+  }
+
+  const updateSchedule = await prisma.loadSheddingSchedule.update({
+    where: {
+      id,
+    },
+    data: {
+      ...payload,
+    },
+  });
+
+  return updateSchedule;
+};
+
+const deleteLoadSheddingSchedule = async (id: string) => {
+  const isScheduleExists = await prisma.loadSheddingSchedule.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      feeders: {
+        include: {
+          manager: true,
+        },
+      },
+    },
+  });
+
+  if (!isScheduleExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Schedule not found");
+  }
+
+  if (
+    isScheduleExists.status === LoadSheddingStatus.PUBLISHED ||
+    isScheduleExists.status === LoadSheddingStatus.APPROVED
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "published or approved schedule cannot be deleted",
+    );
+  }
+
+  await prisma.loadSheddingSchedule.delete({
+    where: {
+      id,
+    },
+  });
+};
+
 export const loadSheddingService = {
+  getLoadSheddingSchedule,
   createLoadSheddingSchedule,
   approveSchedule,
   rejectSchedule,
   publishSchedule,
+  updateLoadSheddingSchedule,
+  deleteLoadSheddingSchedule,
 };
