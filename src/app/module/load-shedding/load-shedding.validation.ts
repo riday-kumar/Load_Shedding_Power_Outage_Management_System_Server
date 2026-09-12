@@ -2,8 +2,8 @@ import { z } from "zod";
 
 const createLoadSheddingSchema = z.object({
   feeder_id: z.string().min(1, "Feeder ID is required"),
-  start_time: z.string().min(1, "Start time is required"),
-  end_time: z.string().min(1, "End time is required"),
+  start_time: z.coerce.date(),
+  end_time: z.coerce.date(),
   reason: z.string().optional(),
   plannedLoadShedding: z
     .number()

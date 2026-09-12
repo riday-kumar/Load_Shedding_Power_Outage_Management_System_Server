@@ -12,4 +12,23 @@ router.post(
   validateRequest(LoadSheddingValidationSchema.createLoadSheddingSchema),
   loadSheddingController.createLoadSheddingSchedule,
 );
+
+router.patch(
+  "/schedule/:id/approve",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  loadSheddingController.approveSchedule,
+);
+
+router.patch(
+  "/schedule/:id/reject",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  loadSheddingController.rejectSchedule,
+);
+
+router.patch(
+  "/schedule/:id/publish",
+  auth(Role.POWER_OPERATOR),
+  loadSheddingController.publishSchedule,
+);
+
 export const LoadSheddingRoutes = router;

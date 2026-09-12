@@ -1,6 +1,11 @@
+import path from "path";
+import ejs from "ejs";
+import { LoadSheddingStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
+import config from "../../config";
+import { transporter } from "../../lib/nodemailer";
 
 interface ICreateLoadShedding {
   feeder_id: string;
@@ -23,8 +28,12 @@ const createLoadSheddingSchedule = async (
     where: {
       date: today,
       feeder_id,
-      start_time,
-      end_time,
+      start_time: {
+        lt: end_time,
+      },
+      end_time: {
+        gt: start_time,
+      },
     },
   });
 
@@ -74,7 +83,7 @@ const createLoadSheddingSchedule = async (
       date: today,
       start_time,
       end_time,
-      reason: reason || "No reason provided",
+      reason: reason ?? "No reason provided",
       plannedLoadShedding,
       powerOperator_id: isPowerOperatorExists.id,
     },
@@ -83,6 +92,216 @@ const createLoadSheddingSchedule = async (
   return newLoadSheddingSchedule;
 };
 
+const approveSchedule = async (id: string, userId: string) => {
+  const isScheduleExists = await prisma.loadSheddingSchedule.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      feeders: {
+        include: {
+          manager: true,
+        },
+      },
+    },
+  });
+
+  if (!isScheduleExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Schedule not found");
+  }
+
+  if (isScheduleExists.status === LoadSheddingStatus.APPROVED) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Schedule already approved");
+  }
+
+  if (isScheduleExists.status !== LoadSheddingStatus.PENDING) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Schedule status must be pending",
+    );
+  }
+
+  const getManager = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      distributorManager: true,
+    },
+  });
+
+  if (!getManager) {
+    throw new AppError(httpStatus.NOT_FOUND, "Manager not found");
+  }
+
+  if (
+    getManager.distributorManager?.distributor_id !==
+    isScheduleExists.feeders.manager.distributor_id
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Manager and feeder manager must be in the same distributor",
+    );
+  }
+
+  if (
+    getManager.distributorManager?.id !== isScheduleExists.feeders.manager.id
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Manager and feeder manager must be same",
+    );
+  }
+
+  const approveSchedule = await prisma.loadSheddingSchedule.update({
+    where: {
+      id,
+    },
+    data: {
+      status: LoadSheddingStatus.APPROVED,
+      approvedById: getManager.distributorManager?.id,
+    },
+  });
+
+  return approveSchedule;
+};
+
+const rejectSchedule = async (id: string, userId: string) => {
+  const isScheduleExists = await prisma.loadSheddingSchedule.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      feeders: {
+        include: {
+          manager: true,
+        },
+      },
+    },
+  });
+
+  if (!isScheduleExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Schedule not found");
+  }
+
+  if (isScheduleExists.status === LoadSheddingStatus.REJECTED) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Schedule already rejected");
+  }
+
+  if (isScheduleExists.status !== LoadSheddingStatus.PENDING) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Schedule status must be pending",
+    );
+  }
+
+  const getManager = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      distributorManager: true,
+    },
+  });
+
+  if (!getManager) {
+    throw new AppError(httpStatus.NOT_FOUND, "Manager not found");
+  }
+
+  if (
+    getManager.distributorManager?.distributor_id !==
+    isScheduleExists.feeders.manager.distributor_id
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Manager and feeder manager must be in the same distributor",
+    );
+  }
+
+  if (
+    getManager.distributorManager?.id !== isScheduleExists.feeders.manager.id
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Manager and feeder manager must be same",
+    );
+  }
+
+  const rejectSchedule = await prisma.loadSheddingSchedule.update({
+    where: {
+      id,
+    },
+    data: {
+      status: LoadSheddingStatus.REJECTED,
+      approvedById: getManager.distributorManager?.id,
+    },
+  });
+
+  return rejectSchedule;
+};
+
+const publishSchedule = async (id: string, userId: string) => {
+  const isScheduleExists = await prisma.loadSheddingSchedule.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      feeders: {
+        include: {
+          manager: true,
+        },
+      },
+    },
+  });
+
+  if (!isScheduleExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Schedule not found");
+  }
+
+  if (isScheduleExists.status !== LoadSheddingStatus.APPROVED) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Schedule status must be approved",
+    );
+  }
+
+  // console.log("feaders area", isScheduleExists.feeders.area);
+
+  const powerOperator = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      powerOperators: true,
+    },
+  });
+
+  if (!powerOperator) {
+    throw new AppError(httpStatus.NOT_FOUND, "Power operator not found");
+  }
+
+  if (powerOperator.powerOperators?.id !== isScheduleExists.powerOperator_id) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "schedule creator power operator and power operator must be same",
+    );
+  }
+
+  const publishSchedule = await prisma.loadSheddingSchedule.update({
+    where: {
+      id,
+    },
+    data: {
+      status: LoadSheddingStatus.PUBLISHED,
+    },
+  });
+
+  return publishSchedule;
+};
+
 export const loadSheddingService = {
   createLoadSheddingSchedule,
+  approveSchedule,
+  rejectSchedule,
+  publishSchedule,
 };
