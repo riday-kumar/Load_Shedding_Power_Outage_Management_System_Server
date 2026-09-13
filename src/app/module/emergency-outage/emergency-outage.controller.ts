@@ -68,10 +68,12 @@ const getAvailableTechnician = catchAsync(
 
 const assignTechnician = catchAsync(async (req: Request, res: Response) => {
   const emergencyOutageId = req.params.id as string;
-  const userId = req.user?.userId!;
+  const technicianId = req.body.technicianId as string;
+  const powerOperatorId = req.user?.userId as string;
   const emergencyOutage = await emergencyOutageService.assignTechnician(
     emergencyOutageId,
-    userId,
+    technicianId,
+    powerOperatorId,
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -100,10 +102,10 @@ const changeStatusToUnderRepair = catchAsync(
 const changeStatusToResolve = catchAsync(
   async (req: Request, res: Response) => {
     const emergencyOutageId = req.params.id as string;
-    const userId = req.user?.userId!;
+    const technicianId = req.body.technicianId as string;
     const emergencyOutage = await emergencyOutageService.changeStatusToResolved(
       emergencyOutageId,
-      userId,
+      technicianId,
     );
     sendResponse(res, {
       statusCode: httpStatus.OK,

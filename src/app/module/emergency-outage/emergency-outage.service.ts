@@ -142,6 +142,7 @@ const getAvailableTechnician = async (userId: string) => {
 const assignTechnician = async (
   emergencyOutageId: string,
   technicianId: string,
+  powerOperatorId: string,
 ) => {
   const hasTechnician = await prisma.technician.findUnique({
     where: {
@@ -188,6 +189,15 @@ const assignTechnician = async (
     },
     data: {
       status: TechnicianStatus.ENGAGED,
+    },
+  });
+
+  await prisma.technicianAssignment.create({
+    data: {
+      emergencyOutage_id: emergencyOutageId,
+      technician_id: technicianId,
+      assignedAt: new Date(),
+      assignedBy: powerOperatorId,
     },
   });
 };
@@ -242,9 +252,7 @@ const changeStatusToResolved = async (
     );
   }
 
-  if (
-    isEmergencyOutageExist.status !== EmergencyOutageStatus.TECHNICIAN_ASSIGNED
-  ) {
+  if (isEmergencyOutageExist.status !== EmergencyOutageStatus.UNDER_REPAIR) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Emergency outage technician is not assigned",
