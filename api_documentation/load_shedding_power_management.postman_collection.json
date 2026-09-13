@@ -1,0 +1,1051 @@
+{
+  "info": {
+    "_postman_id": "fc20ffbd-5284-46b0-8e85-d89e519c0ce9",
+    "name": "load_shedding_power_management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54803731",
+    "_collection_link": "https://go.postman.co/collection/54803731-fc20ffbd-5284-46b0-8e85-d89e519c0ce9?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "google login new",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/auth/google",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "google"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\" : \"learnEnglish\",\r\n    \"email\": \"learnenglishmust@gmail.com\",\r\n    \"phone\" : \"01985277231\",\r\n    \"address\" : \"Nitaiganj, Narayanganj\",\r\n    \"password\" : \"Abcd12345\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/auth/register",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "verify-email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"otp\" : \"138734\",\r\n    \"email\":\"learnenglishmust@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/auth/verify-email",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "verify-email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"rahim01@gmail.com\",\r\n    \"password\" : \"Abcd12345\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/auth/login",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "admin",
+      "item": [
+        {
+          "name": "create power authority",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\" : \"Power Authority one\",\r\n    \"email\" : \"powerauth1@gmail.com\",\r\n    \"address\" : \"Basondhora\",\r\n    \"password\" : \"1234Abcd\",\r\n    \"phone\" : \"01787878789\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/admin/create-power-authority",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "create-power-authority"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create distributor",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"company_name\" : \"BPDB\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/admin/create-distributor",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "create-distributor"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create distributor manager",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"distributor manager 06\",\r\n    \"email\" : \"distributormanager06@gmail.com\",\r\n    \"password\":\"Abcd12345\",\r\n    \"distributor_id\" : \"01M23V700YVQE4RZCWG55NJBJQ\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/admin/create-distributor-manager",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "create-distributor-manager"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "all users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/admin/all-users",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "all-users"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "POWER_AUTH",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "all distributor manager",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/admin/all-distributor-managers",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "all-distributor-managers"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "national power authority",
+      "item": [
+        {
+          "name": "create today's power status",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"generatedPowerMW\": 10000,\r\n    \"demand\" : 12000\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/power-auth/national-level-electricity",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "power-auth",
+                "national-level-electricity"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "power distribution",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    {\r\n        \"expected_need\": 3000,\r\n        \"allocated\" : 2000,\r\n        \"distributor_id\" : \"01M22YFV8Y2R3JK74TBFC2KM8H\"\r\n    },\r\n    {\r\n        \"expected_need\": 2000,\r\n        \"allocated\" : 1000,\r\n        \"distributor_id\" : \"01M23V4YRYT9R77P2BDT24XST8\"\r\n    },\r\n    {\r\n        \"expected_need\": 3000,\r\n        \"allocated\" : 1000,\r\n        \"distributor_id\" : \"01M23V5XZRG7XBS3QRT4ATMBC6\"\r\n    },\r\n    {\r\n        \"expected_need\": 3000,\r\n        \"allocated\" : 1000,\r\n        \"distributor_id\" : \"01M23V6CBAFF2RHZBKSXECDN3S\"\r\n    },\r\n    {\r\n        \"expected_need\": 2000,\r\n        \"allocated\" : 1000,\r\n        \"distributor_id\" : \"01M23V6MT38HQCGSC70WD1T7ZP\"\r\n    },\r\n    {\r\n        \"expected_need\": 2000,\r\n        \"allocated\" : 1000,\r\n        \"distributor_id\" : \"01M23V700YVQE4RZCWG55NJBJQ\"\r\n    }\r\n\r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/power-auth/power-distribution",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "power-auth",
+                "power-distribution"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "distributor-manager",
+      "item": [
+        {
+          "name": "create-substation",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"station_name\" : \"MondolPara\",\r\n    \"distributor_id\" : \"01M22YFV8Y2R3JK74TBFC2KM8H\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/distributor-manager/create-substation",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "distributor-manager",
+                "create-substation"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create-power-operator",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\" : \"Rahim\",\r\n    \"email\" : \"rahim01@gmail.com\",\r\n    \"address\" : \"Nitaiganj,Narayanganj\",\r\n    \"password\" : \"Abcd12345\",\r\n    \"substation_id\" : \"b74c6f55-ddf2-4253-81c5-458c065720bc\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/distributor-manager/create-power-operator",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "distributor-manager",
+                "create-power-operator"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create-feeder",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"feeder_name\":\"MF-001\",\r\n    \"area\" : \"Nitaiganj, Vogobanganj, Dalpotti\",\r\n    \"substation_id\" : \"b74c6f55-ddf2-4253-81c5-458c065720bc\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/distributor-manager/create-feeder",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "distributor-manager",
+                "create-feeder"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create-technician",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"technician_01\",\r\n    \"email\" : \"technician01@gmail.com\",\r\n    \"password\":\"Abcd12345\",\r\n    \"address\" : \"Nitaiganj, Narayanganj\",\r\n    \"skill\" : \"transformer repair\",\r\n    \"substationId\" : \"b74c6f55-ddf2-4253-81c5-458c065720bc\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/distributor-manager/create-technician",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "distributor-manager",
+                "create-technician"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "power allocate into substation",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    {\r\n        \"substation_id\":\"b74c6f55-ddf2-4253-81c5-458c065720bc\",\r\n        \"expectedNeed\": 1200,\r\n        \"allocatedNeed\" : 1000\r\n    }\r\n    \r\n\r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/distributor-manager/power-allocate-into-substation?distributor_company_id=01M22YFV8Y2R3JK74TBFC2KM8H",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "distributor-manager",
+                "power-allocate-into-substation"
+              ],
+              "query": [
+                {
+                  "key": "distributor_company_id",
+                  "value": "01M22YFV8Y2R3JK74TBFC2KM8H"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "load shedding",
+      "item": [
+        {
+          "name": "create load shedding schedule",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"feeder_id\": \"1607298f-de61-4219-89d2-d20e050987e6\",\r\n    \"start_time\": \"2026-09-13T11:00:00+06:00\",\r\n    \"end_time\":  \"2026-09-13T12:00:00+06:00\",\r\n    \"plannedLoadShedding\": 4.5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/load-shedding/schedule",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "load-shedding",
+                "schedule"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "load shedding schedule update",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"feeder_id\": \"1607298f-de61-4219-89d2-d20e050987e6\",\r\n    \"start_time\": \"2026-09-13T10:00:00+06:00\",\r\n    \"end_time\":  \"2026-09-13T11:00:00+06:00\",\r\n    \"plannedLoadShedding\": 4.5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/load-shedding/schedule/af906d4f-548c-4178-b62a-3abb2ad12400",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "load-shedding",
+                "schedule",
+                "af906d4f-548c-4178-b62a-3abb2ad12400"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "load shedding schedule delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/load-shedding/schedule/af906d4f-548c-4178-b62a-3abb2ad12400",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "load-shedding",
+                "schedule",
+                "af906d4f-548c-4178-b62a-3abb2ad12400"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "approve schedule",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/load-shedding/schedule/af906d4f-548c-4178-b62a-3abb2ad12400/approve",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "load-shedding",
+                "schedule",
+                "af906d4f-548c-4178-b62a-3abb2ad12400",
+                "approve"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "reject schedule",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/load-shedding/schedule/f0657ca9-54c3-4cc7-8ebc-b054a080dcd4/reject",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "load-shedding",
+                "schedule",
+                "f0657ca9-54c3-4cc7-8ebc-b054a080dcd4",
+                "reject"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "publish schedule",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/load-shedding/schedule/af906d4f-548c-4178-b62a-3abb2ad12400/publish",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "load-shedding",
+                "schedule",
+                "af906d4f-548c-4178-b62a-3abb2ad12400",
+                "publish"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "all load shedding schedule",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/load-shedding/schedule",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "load-shedding",
+                "schedule"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "emergency-outage",
+      "item": [
+        {
+          "name": "create emergency outage",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"feeder_id\" : \"1607298f-de61-4219-89d2-d20e050987e6\",\r\n    \"reason\" : \"transformer blust\",\r\n    \"startedAt\" : \"10.30 PM\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/emergency-outage",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "emergency-outage"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get emergency outage for power operator",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/emergency-outage",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "emergency-outage"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "emergency outage status : verified",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/emergency-outage/status/verify/e9f69298-998e-4481-8a85-910791f0c8ce",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "emergency-outage",
+                "status",
+                "verify",
+                "e9f69298-998e-4481-8a85-910791f0c8ce"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get available technician",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/emergency-outage/available-technician",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "emergency-outage",
+                "available-technician"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "technician status : assigned",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"technicianId\":\"2ea39848-d9f9-49bb-bc7f-9b3e3a9774c8\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/emergency-outage/status/technician/assign/e9f69298-998e-4481-8a85-910791f0c8ce",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "emergency-outage",
+                "status",
+                "technician",
+                "assign",
+                "e9f69298-998e-4481-8a85-910791f0c8ce"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "emergency outage status : under-repair",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/emergency-outage/status/under-repair/e9f69298-998e-4481-8a85-910791f0c8ce",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "emergency-outage",
+                "status",
+                "under-repair",
+                "e9f69298-998e-4481-8a85-910791f0c8ce"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "emergency outage status : resolved",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"technicianId\":\"2ea39848-d9f9-49bb-bc7f-9b3e3a9774c8\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/emergency-outage/status/resolve/e9f69298-998e-4481-8a85-910791f0c8ce",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "emergency-outage",
+                "status",
+                "resolve",
+                "e9f69298-998e-4481-8a85-910791f0c8ce"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "upload profile image",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "profileImage",
+                  "type": "file",
+                  "src": [
+                    "/E:/Swami-Vivekanand-Wallpaper-Wall-Mural-M.jpg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/user/profile-image",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "profile-image"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "subscription",
+      "item": [
+        {
+          "name": "create subscription",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/subscription",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "subscription"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "pay for subscription",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"subscriptionId\":\"5a96a2ee-5989-42c5-b7fd-1dd46e0fbbed\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/subscription/pay-subscription",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "subscription",
+                "pay-subscription"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "complaint",
+      "item": [
+        {
+          "name": "create complaint",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"complaintMessage\" : \"bill related issue. please check my meter.\",\r\n    \"feeder_id\" : \"1607298f-de61-4219-89d2-d20e050987e6\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/complaint",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "complaint"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all complaint to the same substation pw-operator",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/api/v1/complaint/power-operator",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "complaint",
+                "power-operator"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "approve complaint",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"complaintId\" : \"7b95ca62-d52a-4faa-bc35-1726dde630a9\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base}}/api/v1/complaint/approved",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "complaint",
+                "approved"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
