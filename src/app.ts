@@ -13,6 +13,7 @@ import { DistributorManagerRoutes } from "./app/module/distributor-manager/manag
 import { ProfileRoutes } from "./app/module/profile/profile.route";
 import { LoadSheddingRoutes } from "./app/module/load-shedding/load-shedding.route";
 import { EmergencyOutageRoutes } from "./app/module/emergency-outage/emergency-outage.route";
+import { SubscriptionRoutes } from "./app/module/subscription/subscription.route";
 
 const app: Application = express();
 
@@ -37,6 +38,7 @@ app.use("/api/v1/power-auth", PowerAuthRoutes);
 app.use("/api/v1/distributor-manager", DistributorManagerRoutes);
 app.use("/api/v1/load-shedding", LoadSheddingRoutes);
 app.use("/api/v1/emergency-outage", EmergencyOutageRoutes);
+app.use("/api/v1/subscription", SubscriptionRoutes);
 
 // basic route
 app.get("/", (req: Request, res: Response) => {

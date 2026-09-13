@@ -51,3 +51,18 @@ enum TechnicianAssignmentStatus {
     COMPLETED
     FAILED
 }
+
+enum PaymentStatus {
+    UNPAID
+    PAID
+    FAILED
+    CANCELLED
+    REFUNDED
+}
+
+enum SubscriptionStatus {
+    PENDING
+    ACTIVE
+    EXPIRED
+    CANCELLED
+}

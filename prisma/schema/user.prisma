@@ -30,6 +30,8 @@ model User {
     emergencyOutages           EmergencyOutage[]
     nationalPowerStatuses      NationalPowerStatus[]
     substationPowerAllocations SubstationPowerAllocation[]
+    payment                    Payment[]
+    subscriptions              Subscription[]
 
     @@map("users")
 }
