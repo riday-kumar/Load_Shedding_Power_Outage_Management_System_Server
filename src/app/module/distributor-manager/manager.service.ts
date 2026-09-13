@@ -349,6 +349,7 @@ const createTechnician = async (
       name,
       email,
       address,
+      role: Role.TECHNICIAN,
       emailVerified: true,
       password: hashedPassword,
       technicians: {

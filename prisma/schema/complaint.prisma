@@ -1,0 +1,18 @@
+model Complaint {
+    id String @id @default(uuid())
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    complaintMessage String
+
+    feeder_id String
+    feeders   Feeder @relation(fields: [feeder_id], references: [id], onDelete: Cascade)
+
+    complaintAt           DateTime               @default(now())
+    resolvedAt            DateTime?
+    status                ComplaintStatus        @default(PENDING)
+    technicianAssignments TechnicianAssignment[]
+
+    @@map("complaints")
+}

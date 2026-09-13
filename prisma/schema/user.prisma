@@ -32,6 +32,7 @@ model User {
     substationPowerAllocations SubstationPowerAllocation[]
     payment                    Payment[]
     subscriptions              Subscription[]
+    complaints                 Complaint[]
 
     @@map("users")
 }

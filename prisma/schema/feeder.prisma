@@ -13,6 +13,7 @@ model Feeder {
     updatedAt             DateTime               @updatedAt
     emergencyOutages      EmergencyOutage[]
     loadSheddingSchedules LoadSheddingSchedule[]
+    complaints            Complaint[]
 
     @@map("feeders")
 }
