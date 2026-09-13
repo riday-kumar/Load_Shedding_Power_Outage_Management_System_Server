@@ -4,40 +4,13 @@ import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
 import bcrypt from "bcrypt";
 import config from "../../config";
-
-interface createSubstationPayload {
-  station_name: string;
-  distributor_id: string;
-}
-
-interface createPowerOperatorPayload {
-  name: string;
-  email: string;
-  address: string;
-  password: string;
-  substation_id: string;
-}
-
-interface ISubstationPowerDistribution {
-  substation_id: string;
-  expectedNeed: number;
-  allocatedNeed: number;
-}
-
-interface ICreateFeederPayload {
-  feeder_name: string;
-  area: string;
-  substation_id: string;
-}
-
-interface createTechnicianPayload {
-  name: string;
-  email: string;
-  address: string;
-  password: string;
-  skill: string;
-  substationId: string;
-}
+import {
+  createPowerOperatorPayload,
+  createSubstationPayload,
+  createTechnicianPayload,
+  ICreateFeederPayload,
+  ISubstationPowerDistribution,
+} from "./manager.interface";
 
 const createSubstation = async (
   payload: createSubstationPayload,

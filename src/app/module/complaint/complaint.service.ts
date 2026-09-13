@@ -2,11 +2,7 @@ import { ComplaintStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
-
-interface ICreateComplaint {
-  complaintMessage: string;
-  feeder_id: string;
-}
+import { ICreateComplaint } from "./complaint.interface";
 
 const createComplaint = async (payload: ICreateComplaint, userId: string) => {
   const { complaintMessage, feeder_id } = payload;

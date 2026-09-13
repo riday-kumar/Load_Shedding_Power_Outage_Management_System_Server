@@ -14,28 +14,15 @@ import ejs from "ejs";
 import { transporter } from "../../lib/nodemailer";
 import { jwtUtils } from "../../utility/jwt";
 import { SignOptions } from "jsonwebtoken";
-import { IGoogleLoginPayload } from "./auth.interface";
+import {
+  IGoogleLoginPayload,
+  ILoginUserPayload,
+  IRegisterUserPayload,
+  IVerifyEmailPayload,
+} from "./auth.interface";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { redisClient } from "../../lib/redis";
-
-interface IRegisterUserPayload {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  password: string;
-}
-
-interface IVerifyEmailPayload {
-  email: string;
-  otp: string;
-}
-
-interface ILoginUserPayload {
-  email: string;
-  password: string;
-}
 
 const registerUser = async (payload: IRegisterUserPayload) => {
   const { name, address, password, phone } = payload;

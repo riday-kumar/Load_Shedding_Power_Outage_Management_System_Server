@@ -2,14 +2,7 @@ import { LoadSheddingStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
-
-interface ICreateLoadShedding {
-  feeder_id: string;
-  start_time: string;
-  end_time: string;
-  reason?: string;
-  plannedLoadShedding: number;
-}
+import { ICreateLoadShedding } from "./load-shedding.interface";
 
 const getLoadSheddingSchedule = async () => {
   const allLoadSheddingSchedule = await prisma.loadSheddingSchedule.findMany({

@@ -2,18 +2,10 @@ import { isToday } from "date-fns";
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
-
-interface INationalLevelElectricity {
-  date: string;
-  generatedPowerMW: number;
-  demand: number;
-}
-
-interface ICreatePowerDistribution {
-  expected_need: number;
-  allocated: number;
-  distributor_id: string;
-}
+import {
+  ICreatePowerDistribution,
+  INationalLevelElectricity,
+} from "./power-auth.interface";
 
 const nationalLevelElectricity = async (
   payload: INationalLevelElectricity,

@@ -5,13 +5,7 @@ import {
 import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
-
-interface ICreateEmergencyOutagePayload {
-  feeder_id: string;
-  reporter_id: string;
-  reason?: string;
-  startedAt?: string;
-}
+import { ICreateEmergencyOutagePayload } from "./emergency-outage.interface";
 
 const createEmergencyOutage = async (
   payload: ICreateEmergencyOutagePayload,
