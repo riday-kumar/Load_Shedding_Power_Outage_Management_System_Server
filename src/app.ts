@@ -10,7 +10,7 @@ import { AuthRoutes } from "./app/module/auth/auth.route";
 import { AdminRoutes } from "./app/module/admin/admin.route";
 import { PowerAuthRoutes } from "./app/module/power-auth/power-auth.route";
 import { DistributorManagerRoutes } from "./app/module/distributor-manager/manager.route";
-import { PowerOperatorRoutes } from "./app/module/power-operator/power-operator.route";
+import { ProfileRoutes } from "./app/module/profile/profile.route";
 import { LoadSheddingRoutes } from "./app/module/load-shedding/load-shedding.route";
 import { EmergencyOutageRoutes } from "./app/module/emergency-outage/emergency-outage.route";
 
@@ -31,10 +31,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/v1/auth", AuthRoutes);
+app.use("/api/v1/user", ProfileRoutes);
 app.use("/api/v1/admin", AdminRoutes);
 app.use("/api/v1/power-auth", PowerAuthRoutes);
 app.use("/api/v1/distributor-manager", DistributorManagerRoutes);
-app.use("/api/v1/power-operator", PowerOperatorRoutes);
 app.use("/api/v1/load-shedding", LoadSheddingRoutes);
 app.use("/api/v1/emergency-outage", EmergencyOutageRoutes);
 
