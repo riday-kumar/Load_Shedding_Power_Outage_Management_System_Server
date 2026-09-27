@@ -24,4 +24,19 @@ const profileImage = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const profileController = { profileImage };
+const profileUpdate = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+
+  const userId = req.user?.userId;
+
+  const result = await profileService.profileUpdate(payload, userId!);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Profile updated successfully",
+    data: result,
+  });
+});
+
+export const profileController = { profileImage, profileUpdate };

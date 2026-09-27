@@ -78,6 +78,7 @@ const publishSchedule = catchAsync(async (req: Request, res: Response) => {
     id,
     userId,
   );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

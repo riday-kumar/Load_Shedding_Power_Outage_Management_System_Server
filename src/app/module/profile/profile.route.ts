@@ -19,4 +19,17 @@ router.patch(
   profileController.profileImage,
 );
 
+router.patch(
+  "/profile-update",
+  auth(
+    Role.ADMIN,
+    Role.CUSTOMER,
+    Role.DISTRIBUTOR_MANAGER,
+    Role.POWER_AUTH,
+    Role.POWER_OPERATOR,
+    Role.TECHNICIAN,
+  ),
+  profileController.profileUpdate,
+);
+
 export const ProfileRoutes = router;

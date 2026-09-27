@@ -3,6 +3,10 @@ import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
 import { ICreateLoadShedding } from "./load-shedding.interface";
+import config from "../../config";
+import ejs from "ejs";
+import path from "path";
+import { transporter } from "../../lib/nodemailer";
 
 const getLoadSheddingSchedule = async () => {
   const allLoadSheddingSchedule = await prisma.loadSheddingSchedule.findMany({
@@ -297,6 +301,45 @@ const publishSchedule = async (id: string, userId: string) => {
       status: LoadSheddingStatus.PUBLISHED,
     },
   });
+
+  const loadSheddingFeeder = isScheduleExists.feeder_id;
+
+  // const feederConnectedUsers = await prisma.feeder.findUnique({
+  //   where : {
+  //     id : loadSheddingFeeder
+  //   }
+  // });
+
+  // now we have to send otp Email to the USER
+  const templatePath = path.join(
+    process.cwd(),
+    "src/app/templates/load-shedding-notification.ejs",
+  );
+
+  // const templateData = {
+  //   name: name,
+  //   email,
+  //   otp: otp,
+  //   expirationMinutes: "5",
+  // };
+  const html = await ejs.renderFile(templatePath);
+
+  const users = await prisma.user.findMany({
+    where: {
+      feederId: loadSheddingFeeder,
+    },
+  });
+
+  const recipients = users.map((user) => user.email);
+
+  const mailOptions = {
+    from: config.email_sender,
+    to: recipients,
+    subject: "Load shedding Schedule",
+    html,
+  };
+
+  transporter.sendMail(mailOptions);
 
   return publishSchedule;
 };

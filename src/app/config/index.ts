@@ -45,6 +45,28 @@ const config = {
   bkash_app_key: process.env.BKASH_APP_KEY!,
   bkash_app_secret: process.env.BKASH_APP_SECRET!,
   bkash_callback_url: process.env.BKASH_CALLBACK_URL!,
+
+  admin_name: process.env.ADMIN_NAME!,
+  admin_email: process.env.ADMIN_EMAIL!,
+  admin_password: process.env.ADMIN_PASSWORD!,
+
+  power_authority_name: process.env.POWER_AUTHORITY_NAME!,
+  power_authority_email: process.env.POWER_AUTHORITY_EMAIL!,
+  power_authority_password: process.env.POWER_AUTHORITY_PASSWORD!,
+
+  distributor_manager_name: process.env.DISTRIBUTOR_MANAGER_NAME!,
+  distributor_manager_email: process.env.DISTRIBUTOR_MANAGER_EMAIL!,
+  distributor_manager_password: process.env.DISTRIBUTOR_MANAGER_PASSWORD!,
+  distributor_id: process.env.DISTRIBUTOR_ID!,
+
+  power_operator_name: process.env.POWER_OPERATOR_NAME!,
+  power_operator_email: process.env.POWER_OPERATOR_EMAIL!,
+  power_operator_password: process.env.POWER_OPERATOR_PASSWORD!,
+  substation_id: process.env.SUBSTATION_ID!,
+
+  technician_name: process.env.TECHNICIAN_NAME!,
+  technician_email: process.env.TECHNICIAN_EMAIL!,
+  technician_password: process.env.TECHNICIAN_PASSWORD!,
 };
 
 export default config;

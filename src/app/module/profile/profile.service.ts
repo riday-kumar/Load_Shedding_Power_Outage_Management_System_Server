@@ -3,6 +3,7 @@ import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
 import { cloudinary } from "../../lib/cloudinary";
 import { UploadApiResponse } from "cloudinary";
+import { IUserUpdatePayload } from "./profile.interface";
 
 const uploadProfileImage = async (fileBuffer: Buffer, userId: string) => {
   const currentUser = await prisma.user.findUnique({
@@ -64,6 +65,22 @@ const uploadProfileImage = async (fileBuffer: Buffer, userId: string) => {
 
   return updatedUser;
 };
+
+const profileUpdate = async (payload: IUserUpdatePayload, userId: string) => {
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: payload,
+    omit: {
+      password: true,
+    },
+  });
+
+  return updatedUser;
+};
+
 export const profileService = {
   uploadProfileImage,
+  profileUpdate,
 };
