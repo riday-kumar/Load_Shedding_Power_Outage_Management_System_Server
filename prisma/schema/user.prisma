@@ -6,6 +6,9 @@ model User {
     address  String?
     password String?
 
+    feederId String?
+    feeder   Feeder? @relation(fields: [feederId], references: [id])
+
     googleId     String?      @unique
     authProvider AuthProvider @default(CREDENTIAL)
 

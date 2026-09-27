@@ -5,8 +5,8 @@ model LoadSheddingSchedule {
     powerOperator_id String
 
     date       DateTime @db.Date
-    start_time DateTime @db.Timestamptz()
-    end_time   DateTime @db.Timestamptz()
+    start_time DateTime
+    end_time   DateTime
     reason     String?
 
     status LoadSheddingStatus @default(PENDING)

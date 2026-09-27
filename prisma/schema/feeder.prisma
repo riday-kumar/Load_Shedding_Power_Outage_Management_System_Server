@@ -1,6 +1,8 @@
 model Feeder {
-    id            String @id @default(uuid())
+    id            String  @id @default(uuid())
     feeder_name   String
+    division      String?
+    district      String?
     area          String
     substation_id String
 
@@ -14,6 +16,7 @@ model Feeder {
     emergencyOutages      EmergencyOutage[]
     loadSheddingSchedules LoadSheddingSchedule[]
     complaints            Complaint[]
+    users                 User[]
 
     @@map("feeders")
 }

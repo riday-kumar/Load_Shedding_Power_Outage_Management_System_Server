@@ -4,8 +4,8 @@ model EmergencyOutage {
     reporter_id String
     reportedAt  DateTime              @default(now())
     reason      String?
-    startedAt   String?
-    resolvedAt  String?
+    startedAt   DateTime?
+    resolvedAt  DateTime?
     status      EmergencyOutageStatus @default(REPORTED)
     damage      String?
 
