@@ -3,6 +3,7 @@ import catchAsync from "../../utility/catchAsync";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../utility/sendResponse";
 import httpStatus from "http-status";
+import config from "../../config";
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -24,8 +25,8 @@ const verifyUserEmail = catchAsync(async (req: Request, res: Response) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "none",
+    secure: config.node_env === "development" ? false : true,
+    sameSite: config.node_env === "development" ? "none" : "lax",
     maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
   });
 
@@ -55,14 +56,14 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "none",
+    secure: config.node_env === "development" ? false : true,
+    sameSite: config.node_env === "development" ? "lax" : "none",
     maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "none",
+    secure: config.node_env === "development" ? false : true,
+    sameSite: config.node_env === "development" ? "lax" : "none",
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
   });
 
@@ -84,14 +85,14 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "none",
+    secure: config.node_env === "development" ? false : true,
+    sameSite: config.node_env === "development" ? "lax" : "none",
     maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "none",
+    secure: config.node_env === "development" ? false : true,
+    sameSite: config.node_env === "development" ? "lax" : "none",
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
   });
 

@@ -17,7 +17,11 @@ router.post(
   authController.verifyUserEmail,
 );
 
-router.post("/login", authController.loginUser);
+router.post(
+  "/login",
+  validateRequest(authValidation.LoginSchema),
+  authController.loginUser,
+);
 
 router.post("/google", authController.googleLogin);
 

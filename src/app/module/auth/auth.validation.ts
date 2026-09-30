@@ -34,6 +34,22 @@ const RegisterUserSchema = z.object({
     .regex(/[0-9]/, "Password must contain at least one number"),
 });
 
+const LoginSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email("Please provide a valid email address")
+    .toLowerCase(),
+
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(100, "Password must not exceed 100 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+});
+
 const EmailVerifyZodSchema = z.object({
   email: z.email("Not email!!"),
   otp: z.string().length(6, "OTP must be 6 characters long"),
@@ -41,5 +57,6 @@ const EmailVerifyZodSchema = z.object({
 
 export const authValidation = {
   RegisterUserSchema,
+  LoginSchema,
   EmailVerifyZodSchema,
 };
