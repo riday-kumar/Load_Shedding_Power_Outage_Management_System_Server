@@ -7,6 +7,20 @@ import { validateRequest } from "../../middlewares/validateRequest";
 import { profileValidation } from "./profile.validation";
 
 const router = Router();
+
+router.get(
+  "/profile",
+  auth(
+    Role.ADMIN,
+    Role.CUSTOMER,
+    Role.DISTRIBUTOR_MANAGER,
+    Role.POWER_AUTH,
+    Role.POWER_OPERATOR,
+    Role.TECHNICIAN,
+  ),
+  profileController.profile,
+);
+
 router.patch(
   "/profile-image",
   auth(

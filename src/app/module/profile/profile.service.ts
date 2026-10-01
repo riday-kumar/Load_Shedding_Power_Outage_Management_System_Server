@@ -7,6 +7,19 @@ import { IResetPasswordPayload, IUserUpdatePayload } from "./profile.interface";
 import config from "../../config";
 import bcrypt from "bcrypt";
 
+const profile = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    omit: {
+      password: true,
+    },
+  });
+
+  return user;
+};
+
 const uploadProfileImage = async (fileBuffer: Buffer, userId: string) => {
   const currentUser = await prisma.user.findUnique({
     where: {
@@ -131,6 +144,7 @@ const resetPassword = async (
 };
 
 export const profileService = {
+  profile,
   uploadProfileImage,
   profileUpdate,
   resetPassword,

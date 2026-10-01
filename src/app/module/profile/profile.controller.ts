@@ -4,6 +4,19 @@ import { profileService } from "./profile.service";
 import { sendResponse } from "../../utility/sendResponse";
 import httpStatus from "http-status";
 
+const profile = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user?.userId;
+
+  const result = await profileService.profile(userId as string);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Profile get successfully",
+    data: result,
+  });
+});
+
 const profileImage = catchAsync(async (req: Request, res: Response) => {
   const fileBuffer = req.file?.buffer;
   console.log(fileBuffer);
@@ -58,4 +71,9 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const profileController = { profileImage, profileUpdate, resetPassword };
+export const profileController = {
+  profile,
+  profileImage,
+  profileUpdate,
+  resetPassword,
+};
