@@ -39,4 +39,23 @@ const profileUpdate = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const profileController = { profileImage, profileUpdate };
+const resetPassword = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+  console.log(payload);
+
+  const userId = req.user?.userId;
+
+  const updatePassword = await profileService.resetPassword(
+    payload,
+    userId as string,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password Update Successfully",
+    data: updatePassword,
+  });
+});
+
+export const profileController = { profileImage, profileUpdate, resetPassword };

@@ -6,3 +6,8 @@ export interface IUserUpdatePayload {
   password?: string;
   feederId?: string;
 }
+
+export interface IResetPasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
