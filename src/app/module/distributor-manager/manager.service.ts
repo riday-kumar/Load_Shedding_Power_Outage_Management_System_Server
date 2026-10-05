@@ -238,9 +238,16 @@ const powerAllocateIntoSubstation = async (
   return powerDistributeToSubstation;
 };
 
-const allFeeder = async (payload: string) => {
+const allFeeder = async (payload: string | null) => {
   console.log(payload);
-  const feeders = await prisma.feeder.findMany();
+  const feeders = await prisma.feeder.findMany({
+    where: {
+      area: {
+        contains: payload || "",
+        mode: "insensitive",
+      },
+    },
+  });
   return feeders;
 };
 

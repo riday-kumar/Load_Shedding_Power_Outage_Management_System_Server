@@ -56,8 +56,10 @@ const powerAllocateIntoSubstation = catchAsync(
 );
 
 const getAllFeeder = catchAsync(async (req: Request, res: Response) => {
-  const payload = req.body.trim();
-  const result = await distributorManagerService.allFeeder(payload);
+  // const { area } = req.query;
+  let area = req.query.area || "";
+
+  const result = await distributorManagerService.allFeeder(area as string);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
