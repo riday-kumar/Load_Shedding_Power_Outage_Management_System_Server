@@ -238,6 +238,12 @@ const powerAllocateIntoSubstation = async (
   return powerDistributeToSubstation;
 };
 
+const allFeeder = async (payload: string) => {
+  console.log(payload);
+  const feeders = await prisma.feeder.findMany();
+  return feeders;
+};
+
 const createFeeder = async (payload: ICreateFeederPayload, userId: string) => {
   const { feeder_name, area, substation_id } = payload;
 
@@ -342,6 +348,7 @@ export const distributorManagerService = {
   createSubstation,
   createPowerOperator,
   powerAllocateIntoSubstation,
+  allFeeder,
   createFeeder,
   createTechnician,
 };

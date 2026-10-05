@@ -55,6 +55,18 @@ const powerAllocateIntoSubstation = catchAsync(
   },
 );
 
+const getAllFeeder = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body.trim();
+  const result = await distributorManagerService.allFeeder(payload);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All Feeder Fetched successfully",
+    data: result,
+  });
+});
+
 const createFeeder = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const userId = req.user?.userId as string;
@@ -88,6 +100,7 @@ export const distributorManagerController = {
   createSubstation,
   createPowerOperator,
   powerAllocateIntoSubstation,
+  getAllFeeder,
   createFeeder,
   createTechnician,
 };

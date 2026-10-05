@@ -27,6 +27,8 @@ router.post(
   distributorManagerController.powerAllocateIntoSubstation,
 );
 
+router.get("/feeder", distributorManagerController.getAllFeeder);
+
 router.post(
   "/create-feeder",
   auth(Role.DISTRIBUTOR_MANAGER),
