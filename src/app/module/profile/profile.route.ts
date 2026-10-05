@@ -45,6 +45,7 @@ router.patch(
     Role.POWER_OPERATOR,
     Role.TECHNICIAN,
   ),
+  validateRequest(profileValidation.UpdateProfileSchema),
   profileController.profileUpdate,
 );
 
