@@ -3,10 +3,12 @@ import { prisma } from "../../lib/prisma";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
 import bcrypt from "bcrypt";
-import { Role } from "../../../generated/prisma/enums";
+import { Role, UserStatus } from "../../../generated/prisma/enums";
 
 interface ICreatePowerAuth {
   name: string;
+  phone: string;
+  address: string;
   password: string;
   email: string;
 }
@@ -23,7 +25,7 @@ interface ICreateDistributor {
 }
 
 const createPowerAuthority = async (payload: ICreatePowerAuth) => {
-  const { name, password } = payload;
+  const { name, phone, address, password } = payload;
   const email = payload.email.trim().toLowerCase();
 
   const isUserExists = await prisma.user.findUnique({
@@ -45,6 +47,8 @@ const createPowerAuthority = async (payload: ICreatePowerAuth) => {
   const powerAuthority = await prisma.user.create({
     data: {
       name,
+      phone,
+      address,
       email,
       password: hashedPassword,
       emailVerified: true,
@@ -133,9 +137,24 @@ const allUsers = async (payload: string | null) => {
   return users;
 };
 
-const allDistributors = async () => {
-  const distributors = await prisma.distributor.findMany();
-  return distributors;
+const updateUserStatus = async (userId: string, status: string) => {
+  if (status !== UserStatus.BLOCK && status !== UserStatus.DELETED) {
+    throw new AppError(httpStatus.CONFLICT, "status not matched!");
+  }
+
+  const changeStatus = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      status,
+    },
+    omit: {
+      password: true,
+    },
+  });
+
+  return changeStatus;
 };
 
 const allDistributorManager = async () => {
@@ -162,6 +181,6 @@ export const adminService = {
   createDistributor,
   createDistributorManager,
   allUsers,
-  allDistributors,
+  updateUserStatus,
   allDistributorManager,
 };

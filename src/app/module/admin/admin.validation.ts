@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UserStatus } from "../../../generated/prisma/enums";
 
 const CreatePowerAuthoritySchema = z.object({
   name: z.string().min(1, "Name is required"),

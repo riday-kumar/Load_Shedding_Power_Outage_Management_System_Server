@@ -3,6 +3,8 @@ import catchAsync from "../../utility/catchAsync";
 import { adminService } from "./admin.service";
 import httpStatus from "http-status";
 import { sendResponse } from "../../utility/sendResponse";
+import { AppError } from "../../utility/AppError";
+import { UserStatus } from "../../../generated/prisma/enums";
 
 const createPowerAuthority = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -58,6 +60,19 @@ const allUsers = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.params.userId as string;
+  // console.log("user id", userId);
+  const status = req.body.status;
+  const result = await adminService.updateUserStatus(userId, status);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User Status Updated successfully",
+    data: result,
+  });
+});
+
 const allDistributorManager = catchAsync(
   async (req: Request, res: Response) => {
     const distributorsManager = await adminService.allDistributorManager();
@@ -75,5 +90,6 @@ export const adminController = {
   createDistributor,
   createDistributorManager,
   allUsers,
+  updateUserStatus,
   allDistributorManager,
 };

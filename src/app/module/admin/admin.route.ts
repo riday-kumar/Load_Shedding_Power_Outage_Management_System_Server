@@ -24,16 +24,18 @@ router.post(
   validateRequest(adminValidation.CreateDistributorManagerSchema),
   adminController.createDistributorManager,
 );
-router.get(
-  "/all-users",
-  auth(Role.ADMIN),
-  adminController.allUsers,
-  adminController.allUsers,
-);
+router.get("/all-users", auth(Role.ADMIN), adminController.allUsers);
 router.get(
   "/all-distributor-managers",
   auth(Role.ADMIN),
   adminController.allDistributorManager,
+);
+
+router.patch(
+  "/users/:userId/status",
+  auth(Role.ADMIN),
+
+  adminController.updateUserStatus,
 );
 
 export const AdminRoutes = router;
