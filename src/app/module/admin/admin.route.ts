@@ -7,19 +7,28 @@ import { adminValidation } from "./admin.validation";
 
 const router = Router();
 router.post(
-  "/create-power-authority",
+  "/power-authority",
   auth(Role.ADMIN),
   validateRequest(adminValidation.CreatePowerAuthoritySchema),
   adminController.createPowerAuthority,
 );
+
+router.get("/distributor", adminController.allDistributorCompany);
+
 router.post(
-  "/create-distributor",
+  "/distributor",
   auth(Role.ADMIN),
   validateRequest(adminValidation.CreateDistributorSchema),
   adminController.createDistributor,
 );
+
+router.patch(
+  "/distributor/:distributorId/status",
+  auth(Role.ADMIN),
+  adminController.deleteDistributor,
+);
 router.post(
-  "/create-distributor-manager",
+  "/distributor-manager",
   auth(Role.ADMIN),
   validateRequest(adminValidation.CreateDistributorManagerSchema),
   adminController.createDistributorManager,

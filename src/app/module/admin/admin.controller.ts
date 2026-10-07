@@ -17,6 +17,18 @@ const createPowerAuthority = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const allDistributorCompany = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await adminService.getAllDistributor();
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "All Distributor Company fetched successfully",
+      data: result,
+    });
+  },
+);
+
 const createDistributor = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const distributor = await adminService.createDistributor(payload);
@@ -25,6 +37,20 @@ const createDistributor = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     message: "Distributor created successfully",
     data: distributor,
+  });
+});
+
+const deleteDistributor = catchAsync(async (req: Request, res: Response) => {
+  const distributorId = req.params.distributorId;
+
+  const result = await adminService.deleteDistributorCompany(
+    distributorId as string,
+  );
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Distributor Company Deleted successfully",
+    data: result,
   });
 });
 
@@ -87,7 +113,9 @@ const allDistributorManager = catchAsync(
 
 export const adminController = {
   createPowerAuthority,
+  allDistributorCompany,
   createDistributor,
+  deleteDistributor,
   createDistributorManager,
   allUsers,
   updateUserStatus,

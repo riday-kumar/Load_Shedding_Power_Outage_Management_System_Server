@@ -61,6 +61,11 @@ const createPowerAuthority = async (payload: ICreatePowerAuth) => {
   return powerAuthority;
 };
 
+const getAllDistributor = async () => {
+  const company = await prisma.distributor.findMany();
+  return company;
+};
+
 const createDistributor = async (payload: ICreateDistributor) => {
   const { company_name } = payload;
   const isDistributorExists = await prisma.distributor.findFirst({
@@ -84,18 +89,57 @@ const createDistributor = async (payload: ICreateDistributor) => {
   return newDistributor;
 };
 
+const deleteDistributorCompany = async (id: string) => {
+  const isCompanyExists = await prisma.distributor.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!isCompanyExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Distributor Company Not Found");
+  }
+
+  const updateStatus = await prisma.distributor.update({
+    where: {
+      id: isCompanyExists.id,
+    },
+    data: {
+      isDeleted: true,
+    },
+  });
+
+  return updateStatus;
+};
+
 const createDistributorManager = async (payload: ICreateDistributorManager) => {
   const { name, password, distributor_id } = payload;
   const email = payload.email.trim().toLowerCase();
 
   const isManagerExists = await prisma.user.findUnique({
-    where: { email, role: Role.DISTRIBUTOR_MANAGER },
+    where: {
+      email,
+      role: Role.DISTRIBUTOR_MANAGER,
+    },
   });
 
   if (isManagerExists) {
     throw new AppError(
       httpStatus.CONFLICT,
       "A distributor manager with this email address already exists.",
+    );
+  }
+
+  const checkCompanyHasManager = await prisma.distributorManager.findFirst({
+    where: {
+      distributor_id,
+    },
+  });
+
+  if (checkCompanyHasManager) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "Already Manager Exists for this Company",
     );
   }
 
@@ -132,6 +176,13 @@ const allUsers = async (payload: string | null) => {
     },
     omit: {
       password: true,
+    },
+    include: {
+      distributorManager: {
+        include: {
+          distributor: true,
+        },
+      },
     },
   });
   return users;
@@ -178,7 +229,9 @@ const allDistributorManager = async () => {
 
 export const adminService = {
   createPowerAuthority,
+  getAllDistributor,
   createDistributor,
+  deleteDistributorCompany,
   createDistributorManager,
   allUsers,
   updateUserStatus,
