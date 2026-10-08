@@ -13,6 +13,7 @@ import {
   IUpdateFeederPayload,
   updateSubstationPayload,
 } from "./manager.interface";
+import { FeederWhereInput } from "../../../generated/prisma/models";
 
 const getSubstationForManager = async (userId: string) => {
   const allSubstationOfManager = await prisma.substation.findMany({
@@ -308,17 +309,50 @@ const powerAllocateIntoSubstation = async (
   return powerDistributeToSubstation;
 };
 
-const allFeeder = async (area: string | null, userId: string | null) => {
+export interface IAllFeeder extends FeederWhereInput {
+  area?: string;
+  creator?: string;
+  page?: string;
+  limit?: string;
+}
+
+const allFeeder = async (query: IAllFeeder) => {
   // console.log(payload);
+  const limit = query.limit ? Number(query.limit) : 5;
+  const page = query.page ? Number(query.page) : 1;
+  const skip = (page - 1) * limit;
+
+  const andCondition: FeederWhereInput[] = [];
+
+  if (query.area) {
+    andCondition.push({
+      OR: [
+        {
+          area: {
+            contains: query.area,
+            mode: "insensitive",
+          },
+        },
+      ],
+    });
+  }
+
+  if (query.creator) {
+    andCondition.push({
+      createdBy: query.creator,
+    });
+  }
+
   const feeders = await prisma.feeder.findMany({
     where: {
-      area: {
-        contains: area || "",
-        mode: "insensitive",
-      },
-      createdBy: {
-        contains: userId || "",
-      },
+      // area: {
+      //   contains: area || "",
+      //   mode: "insensitive",
+      // },
+      // createdBy: {
+      //   contains: userId || "",
+      // },
+      AND: andCondition,
     },
     include: {
       substation: {
@@ -327,8 +361,25 @@ const allFeeder = async (area: string | null, userId: string | null) => {
         },
       },
     },
+    take: limit,
+    skip: skip,
   });
-  return feeders;
+
+  const totalFeedersCount = await prisma.feeder.count({
+    where: {
+      AND: andCondition,
+    },
+  });
+
+  return {
+    data: feeders,
+    meta: {
+      page: page,
+      limit: limit,
+      total: totalFeedersCount,
+      totalPage: Math.ceil(totalFeedersCount / limit),
+    },
+  };
 };
 
 const createFeeder = async (payload: ICreateFeederPayload, userId: string) => {

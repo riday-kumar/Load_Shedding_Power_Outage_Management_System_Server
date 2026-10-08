@@ -104,14 +104,9 @@ const powerAllocateIntoSubstation = catchAsync(
 );
 
 const getAllFeeder = catchAsync(async (req: Request, res: Response) => {
-  // const { area } = req.query;
-  let area = req.query.area || "";
-  const creator = req.query.creator || "";
+  const query = req.query;
 
-  const result = await distributorManagerService.allFeeder(
-    area as string,
-    creator as string,
-  );
+  const result = await distributorManagerService.allFeeder(query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
