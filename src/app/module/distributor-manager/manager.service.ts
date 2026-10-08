@@ -10,32 +10,44 @@ import {
   createTechnicianPayload,
   ICreateFeederPayload,
   ISubstationPowerDistribution,
+  updateSubstationPayload,
 } from "./manager.interface";
+
+const getSubstationForManager = async (userId: string) => {
+  const allSubstationOfManager = await prisma.substation.findMany({
+    where: {
+      createdById: userId,
+    },
+    include: {
+      distributor: {
+        select: {
+          company_name: true,
+        },
+      },
+    },
+  });
+
+  return allSubstationOfManager;
+};
 
 const createSubstation = async (
   payload: createSubstationPayload,
   userId: string,
 ) => {
-  const { station_name, distributor_id } = payload;
+  const { station_name } = payload;
 
-  const isUnderSameDistributorCompany = await prisma.user.findUnique({
+  const managerExistingCompany = await prisma.user.findUnique({
     where: {
       id: userId,
     },
     include: {
-      distributorManager: true,
+      distributorManager: {
+        select: {
+          distributor_id: true,
+        },
+      },
     },
   });
-
-  if (
-    isUnderSameDistributorCompany?.distributorManager?.distributor_id !==
-    distributor_id
-  ) {
-    throw new AppError(
-      httpStatus.CONFLICT,
-      "Manager not found on same distributor company",
-    );
-  }
 
   const isSubStationExist = await prisma.substation.findFirst({
     where: {
@@ -51,11 +63,47 @@ const createSubstation = async (
   const subStation = await prisma.substation.create({
     data: {
       station_name,
-      distributor_id,
+      distributor_id: managerExistingCompany?.distributorManager
+        ?.distributor_id as string,
       createdById: userId,
     },
   });
   return subStation;
+};
+
+const updateSubstation = async (
+  substationId: string,
+  payload: updateSubstationPayload,
+  userId: string,
+) => {
+  const isSubstationExists = await prisma.substation.findUnique({
+    where: {
+      id: substationId,
+      distributor_id: payload.distributor_id,
+    },
+  });
+
+  if (!isSubstationExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Substation Not Found");
+  }
+
+  if (isSubstationExists.createdById !== userId) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not eligible to edit this substation",
+    );
+  }
+
+  const updateStation = await prisma.substation.update({
+    where: {
+      id: isSubstationExists.id,
+    },
+    data: {
+      station_name: payload.station_name,
+    },
+  });
+
+  return updateStation;
 };
 
 const createPowerOperator = async (
@@ -352,7 +400,9 @@ const createTechnician = async (
 };
 
 export const distributorManagerService = {
+  getSubstationForManager,
   createSubstation,
+  updateSubstation,
   createPowerOperator,
   powerAllocateIntoSubstation,
   allFeeder,

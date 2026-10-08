@@ -1,6 +1,10 @@
 export interface createSubstationPayload {
   station_name: string;
-  distributor_id: string;
+}
+
+export interface updateSubstationPayload {
+  distributor_id?: string;
+  station_name?: string;
 }
 
 export interface createPowerOperatorPayload {

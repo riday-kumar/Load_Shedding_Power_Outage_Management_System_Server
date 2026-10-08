@@ -7,11 +7,23 @@ import { Role } from "../../../generated/prisma/enums";
 
 const router = Router();
 
+router.get(
+  "/substation",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  distributorManagerController.getSubstationForManager,
+);
+
 router.post(
-  "/create-substation",
+  "/substation",
   auth(Role.DISTRIBUTOR_MANAGER),
   validateRequest(distributorManagerValidation.createSubstationSchema),
   distributorManagerController.createSubstation,
+);
+
+router.patch(
+  "/substation/:substationId",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  distributorManagerController.updateSubstation,
 );
 
 router.post(

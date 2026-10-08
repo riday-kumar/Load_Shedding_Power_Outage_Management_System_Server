@@ -4,6 +4,21 @@ import { sendResponse } from "../../utility/sendResponse";
 import { distributorManagerService } from "./manager.service";
 import httpStatus from "http-status";
 
+const getSubstationForManager = catchAsync(
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId as string;
+    const result =
+      await distributorManagerService.getSubstationForManager(userId);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Substation fetched successfully For the Manager",
+      data: result,
+    });
+  },
+);
+
 const createSubstation = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const userId = req.user?.userId as string;
@@ -16,6 +31,24 @@ const createSubstation = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Substation created successfully",
+    data: result,
+  });
+});
+
+const updateSubstation = catchAsync(async (req: Request, res: Response) => {
+  const substationId = req.params.substationId as string;
+  const payload = req.body;
+  const userId = req.user?.userId as string;
+  const result = await distributorManagerService.updateSubstation(
+    substationId,
+    payload,
+    userId,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Substation Updated successfully",
     data: result,
   });
 });
@@ -99,7 +132,9 @@ const createTechnician = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const distributorManagerController = {
+  getSubstationForManager,
   createSubstation,
+  updateSubstation,
   createPowerOperator,
   powerAllocateIntoSubstation,
   getAllFeeder,

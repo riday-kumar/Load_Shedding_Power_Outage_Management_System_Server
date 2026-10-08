@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const createSubstationSchema = z.object({
   station_name: z.string().min(1, "Substation name is required"),
-  distributor_id: z.string().min(1, "Distributor id is required"),
 });
 
 export const CreatePowerOperatorSchema = z.object({
