@@ -148,6 +148,21 @@ const updateFeeder = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getTechnicians = catchAsync(async (req: Request, res: Response) => {
+  const { managerId, substationId } = req.query;
+  // const userId = req.user?.userId as string;
+  const result = await distributorManagerService.getTechnicians(
+    managerId as string,
+    substationId as string,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Technician fetched successfully",
+    data: result,
+  });
+});
 const createTechnician = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const userId = req.user?.userId as string;
@@ -174,5 +189,6 @@ export const distributorManagerController = {
   getAllFeeder,
   createFeeder,
   updateFeeder,
+  getTechnicians,
   createTechnician,
 };

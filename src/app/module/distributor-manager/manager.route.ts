@@ -60,8 +60,14 @@ router.patch(
   distributorManagerController.updateFeeder,
 );
 
+router.get(
+  "/technician",
+  auth(Role.DISTRIBUTOR_MANAGER, Role.POWER_OPERATOR),
+  distributorManagerController.getTechnicians,
+);
+
 router.post(
-  "/create-technician",
+  "/technician",
   auth(Role.DISTRIBUTOR_MANAGER),
   validateRequest(distributorManagerValidation.createTechnicianSchema),
   distributorManagerController.createTechnician,

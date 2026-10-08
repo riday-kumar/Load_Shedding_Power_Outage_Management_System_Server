@@ -426,6 +426,36 @@ const updateFeeder = async (payload: IUpdateFeederPayload, userId: string) => {
   return updateFeeder;
 };
 
+const getTechnicians = async (managerId: string, substationId: string) => {
+  const technicians = await prisma.technician.findMany({
+    where: {
+      createdBy: {
+        contains: managerId,
+        mode: "insensitive",
+      },
+      substationId: {
+        contains: substationId,
+        mode: "insensitive",
+      },
+    },
+    include: {
+      users: {
+        select: {
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
+      substation: {
+        select: {
+          station_name: true,
+        },
+      },
+    },
+  });
+  return technicians;
+};
+
 const createTechnician = async (
   payload: createTechnicianPayload,
   userId: string,
@@ -488,5 +518,6 @@ export const distributorManagerService = {
   allFeeder,
   createFeeder,
   updateFeeder,
+  getTechnicians,
   createTechnician,
 };
