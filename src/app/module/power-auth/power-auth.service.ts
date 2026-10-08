@@ -6,6 +6,47 @@ import {
   ICreatePowerDistribution,
   INationalLevelElectricity,
 } from "./power-auth.interface";
+import { NationalPowerStatusWhereInput } from "../../../generated/prisma/models";
+
+interface IGetNationalElectricityInfo extends NationalPowerStatusWhereInput {
+  today?: string;
+}
+
+const getNationalLevelElectricity = async (
+  query: IGetNationalElectricityInfo,
+) => {
+  // const { generatedPowerMW, demand } = payload;
+
+  const andCondition: IGetNationalElectricityInfo[] = [];
+
+  if (query.today) {
+    const today = new Date();
+
+    const startOfToday = new Date(today);
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const startOfTomorrow = new Date(today);
+    startOfTomorrow.setHours(24, 0, 0, 0);
+
+    andCondition.push({
+      date: {
+        gte: startOfToday,
+        lt: startOfTomorrow,
+      },
+    });
+  }
+
+  const result = await prisma.nationalPowerStatus.findMany({
+    where: {
+      AND: andCondition,
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
+
+  return result;
+};
 
 const nationalLevelElectricity = async (
   payload: INationalLevelElectricity,
@@ -120,6 +161,7 @@ const powerDistribution = async (payload: ICreatePowerDistribution[]) => {
 };
 
 export const powerAuthServices = {
+  getNationalLevelElectricity,
   nationalLevelElectricity,
   powerDistribution,
 };

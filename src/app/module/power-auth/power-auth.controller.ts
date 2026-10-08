@@ -4,6 +4,20 @@ import { powerAuthServices } from "./power-auth.service";
 import { sendResponse } from "../../utility/sendResponse";
 import httpStatus from "http-status";
 
+const getNationalLevelElectricity = catchAsync(
+  async (req: Request, res: Response) => {
+    const query = req.query;
+    const result = await powerAuthServices.getNationalLevelElectricity(query);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "National level electricity fetched successfully",
+      data: result,
+    });
+  },
+);
+
 const nationalLevelElectricity = catchAsync(
   async (req: Request, res: Response) => {
     const payload = req.body;
@@ -34,6 +48,7 @@ const powerDistribution = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const powerAuthController = {
+  getNationalLevelElectricity,
   nationalLevelElectricity,
   powerDistribution,
 };

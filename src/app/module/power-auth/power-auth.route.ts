@@ -7,6 +7,11 @@ import { powerAuthValidation } from "./power-auth.validation";
 
 const router = Router();
 
+router.get(
+  "/national-level-electricity",
+  powerAuthController.getNationalLevelElectricity,
+);
+
 router.post(
   "/national-level-electricity",
   auth(Role.POWER_AUTH),
