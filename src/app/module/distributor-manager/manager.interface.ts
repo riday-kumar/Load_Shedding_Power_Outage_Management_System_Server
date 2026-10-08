@@ -23,8 +23,19 @@ export interface ISubstationPowerDistribution {
 
 export interface ICreateFeederPayload {
   feeder_name: string;
+  division?: string;
+  district?: string;
   area: string;
   substation_id: string;
+}
+
+export interface IUpdateFeederPayload {
+  id: string;
+  feeder_name?: string;
+  division?: string;
+  district?: string;
+  area?: string;
+  substation_id?: string;
 }
 
 export interface createTechnicianPayload {

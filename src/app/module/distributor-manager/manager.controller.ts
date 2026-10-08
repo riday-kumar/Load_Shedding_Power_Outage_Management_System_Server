@@ -106,8 +106,12 @@ const powerAllocateIntoSubstation = catchAsync(
 const getAllFeeder = catchAsync(async (req: Request, res: Response) => {
   // const { area } = req.query;
   let area = req.query.area || "";
+  const creator = req.query.creator || "";
 
-  const result = await distributorManagerService.allFeeder(area as string);
+  const result = await distributorManagerService.allFeeder(
+    area as string,
+    creator as string,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -119,6 +123,7 @@ const getAllFeeder = catchAsync(async (req: Request, res: Response) => {
 
 const createFeeder = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
+  console.log("payload", payload);
   const userId = req.user?.userId as string;
   const result = await distributorManagerService.createFeeder(payload, userId);
 
@@ -126,6 +131,19 @@ const createFeeder = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Feeder created successfully",
+    data: result,
+  });
+});
+
+const updateFeeder = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+  const userId = req.user?.userId as string;
+  const result = await distributorManagerService.updateFeeder(payload, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Feeder updated successfully",
     data: result,
   });
 });
@@ -155,5 +173,6 @@ export const distributorManagerController = {
   powerAllocateIntoSubstation,
   getAllFeeder,
   createFeeder,
+  updateFeeder,
   createTechnician,
 };

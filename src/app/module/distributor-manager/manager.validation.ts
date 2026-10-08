@@ -30,6 +30,8 @@ export const CreatePowerOperatorSchema = z.object({
 
 const createFeederSchema = z.object({
   feeder_name: z.string().min(1, "Feeder name is required"),
+  division: z.string().min(1, "Division is required"),
+  district: z.string().min(1, "District is required"),
   area: z.string().min(1, "Area is required"),
   substation_id: z.string().min(1, "Substation ID is required"),
 });

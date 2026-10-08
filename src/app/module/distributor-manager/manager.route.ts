@@ -48,10 +48,16 @@ router.post(
 router.get("/feeder", distributorManagerController.getAllFeeder);
 
 router.post(
-  "/create-feeder",
+  "/feeder",
   auth(Role.DISTRIBUTOR_MANAGER),
   validateRequest(distributorManagerValidation.createFeederSchema),
   distributorManagerController.createFeeder,
+);
+
+router.patch(
+  "/feeder",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  distributorManagerController.updateFeeder,
 );
 
 router.post(

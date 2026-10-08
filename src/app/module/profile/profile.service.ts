@@ -15,6 +15,9 @@ const profile = async (userId: string) => {
     omit: {
       password: true,
     },
+    include: {
+      distributorManager: true,
+    },
   });
 
   return user;

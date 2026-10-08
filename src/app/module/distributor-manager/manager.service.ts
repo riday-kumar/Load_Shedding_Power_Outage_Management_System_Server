@@ -10,6 +10,7 @@ import {
   createTechnicianPayload,
   ICreateFeederPayload,
   ISubstationPowerDistribution,
+  IUpdateFeederPayload,
   updateSubstationPayload,
 } from "./manager.interface";
 
@@ -307,13 +308,23 @@ const powerAllocateIntoSubstation = async (
   return powerDistributeToSubstation;
 };
 
-const allFeeder = async (payload: string | null) => {
-  console.log(payload);
+const allFeeder = async (area: string | null, userId: string | null) => {
+  // console.log(payload);
   const feeders = await prisma.feeder.findMany({
     where: {
       area: {
-        contains: payload || "",
+        contains: area || "",
         mode: "insensitive",
+      },
+      createdBy: {
+        contains: userId || "",
+      },
+    },
+    include: {
+      substation: {
+        select: {
+          station_name: true,
+        },
       },
     },
   });
@@ -321,8 +332,8 @@ const allFeeder = async (payload: string | null) => {
 };
 
 const createFeeder = async (payload: ICreateFeederPayload, userId: string) => {
-  const { feeder_name, area, substation_id } = payload;
-
+  const { feeder_name, division, district, area, substation_id } = payload;
+  console.log(payload);
   const manager = await prisma.distributorManager.findUnique({
     where: {
       user_id: userId,
@@ -357,6 +368,8 @@ const createFeeder = async (payload: ICreateFeederPayload, userId: string) => {
   const newFeeder = await prisma.feeder.create({
     data: {
       feeder_name,
+      division,
+      district,
       area,
       substation_id,
       createdBy: manager?.id,
@@ -366,6 +379,51 @@ const createFeeder = async (payload: ICreateFeederPayload, userId: string) => {
     },
   });
   return newFeeder;
+};
+
+const updateFeeder = async (payload: IUpdateFeederPayload, userId: string) => {
+  const { id, feeder_name, division, district, area, substation_id } = payload;
+
+  const manager = await prisma.distributorManager.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  if (!manager) {
+    throw new AppError(httpStatus.NOT_FOUND, "Distributor manager not found");
+  }
+
+  const isFeederExists = await prisma.feeder.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!isFeederExists) {
+    throw new AppError(httpStatus.NOT_FOUND, "Feeder not found");
+  }
+
+  if (isFeederExists.createdBy !== manager?.id) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not authorized to update this feeder",
+    );
+  }
+
+  const updateFeeder = await prisma.feeder.update({
+    where: {
+      id,
+    },
+    data: {
+      feeder_name,
+      division,
+      district,
+      area,
+      substation_id,
+    },
+  });
+  return updateFeeder;
 };
 
 const createTechnician = async (
@@ -429,5 +487,6 @@ export const distributorManagerService = {
   powerAllocateIntoSubstation,
   allFeeder,
   createFeeder,
+  updateFeeder,
   createTechnician,
 };
