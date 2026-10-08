@@ -26,8 +26,14 @@ router.patch(
   distributorManagerController.updateSubstation,
 );
 
+router.get(
+  "/power-operator",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  distributorManagerController.getPowerOperatorsForManager,
+);
+
 router.post(
-  "/create-power-operator",
+  "/power-operator",
   auth(Role.DISTRIBUTOR_MANAGER),
   validateRequest(distributorManagerValidation.CreatePowerOperatorSchema),
   distributorManagerController.createPowerOperator,

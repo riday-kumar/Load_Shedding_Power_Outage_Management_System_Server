@@ -53,6 +53,21 @@ const updateSubstation = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getPowerOperatorsForManager = catchAsync(
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId as string;
+    const result =
+      await distributorManagerService.getPowerOperatorsForManager(userId);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Power operators fetched successfully For the Manager",
+      data: result,
+    });
+  },
+);
+
 const createPowerOperator = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const userId = req.user?.userId as string;
@@ -135,6 +150,7 @@ export const distributorManagerController = {
   getSubstationForManager,
   createSubstation,
   updateSubstation,
+  getPowerOperatorsForManager,
   createPowerOperator,
   powerAllocateIntoSubstation,
   getAllFeeder,

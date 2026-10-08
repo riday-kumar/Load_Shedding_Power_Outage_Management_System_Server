@@ -106,6 +106,27 @@ const updateSubstation = async (
   return updateStation;
 };
 
+const getPowerOperatorsForManager = async (userId: string) => {
+  const powerOperators = await prisma.powerOperator.findMany({
+    where: {
+      createdById: userId,
+    },
+    include: {
+      substation: true,
+      user: {
+        select: {
+          name: true,
+          email: true,
+          phone: true,
+          address: true,
+        },
+      },
+    },
+  });
+
+  return powerOperators;
+};
+
 const createPowerOperator = async (
   payload: createPowerOperatorPayload,
   userId: string,
@@ -403,6 +424,7 @@ export const distributorManagerService = {
   getSubstationForManager,
   createSubstation,
   updateSubstation,
+  getPowerOperatorsForManager,
   createPowerOperator,
   powerAllocateIntoSubstation,
   allFeeder,
