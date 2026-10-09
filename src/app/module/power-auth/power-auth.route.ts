@@ -19,6 +19,8 @@ router.post(
   powerAuthController.nationalLevelElectricity,
 );
 
+router.get("/power-distribution", powerAuthController.getAllPowerDistribution);
+
 router.post(
   "/power-distribution",
   auth(Role.POWER_AUTH),

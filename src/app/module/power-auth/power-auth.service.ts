@@ -82,6 +82,22 @@ const nationalLevelElectricity = async (
   return result;
 };
 
+const allPowerDistribution = async () => {
+  const result = await prisma.powerDistribution.findMany({
+    orderBy: {
+      allocatedAt: "desc",
+    },
+    include: {
+      distributor: {
+        select: {
+          company_name: true,
+        },
+      },
+    },
+  });
+  return result;
+};
+
 const powerDistribution = async (payload: ICreatePowerDistribution[]) => {
   // console.log("payload", payload);
 
@@ -163,5 +179,6 @@ const powerDistribution = async (payload: ICreatePowerDistribution[]) => {
 export const powerAuthServices = {
   getNationalLevelElectricity,
   nationalLevelElectricity,
+  allPowerDistribution,
   powerDistribution,
 };

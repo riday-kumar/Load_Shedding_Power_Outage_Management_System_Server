@@ -47,8 +47,21 @@ const powerDistribution = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllPowerDistribution = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await powerAuthServices.allPowerDistribution();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Power distribution data fetched successfully",
+      data: result,
+    });
+  },
+);
+
 export const powerAuthController = {
   getNationalLevelElectricity,
   nationalLevelElectricity,
   powerDistribution,
+  getAllPowerDistribution,
 };
