@@ -4,6 +4,19 @@ import { subscriptionService } from "./subscription.service";
 import { sendResponse } from "../../utility/sendResponse";
 import httpStatus from "http-status";
 
+const getSubscription = catchAsync(async (req: Request, res: Response) => {
+  const currentUserId = req.user?.userId;
+  const result = await subscriptionService.getSubscription(
+    currentUserId as string,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Subscriptions fetched Successfully",
+    data: result,
+  });
+});
+
 const createSubscription = catchAsync(async (req: Request, res: Response) => {
   const currentUserId = req.user?.userId;
   const result = await subscriptionService.createSubscription(
@@ -39,6 +52,7 @@ const createSubscriptionCallback = catchAsync(
 );
 
 export const subscriptionController = {
+  getSubscription,
   createSubscription,
   payForSubscription,
   createSubscriptionCallback,

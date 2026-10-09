@@ -9,6 +9,15 @@ import { ReqUser } from "../../middlewares/checkAuth";
 import { AppError } from "../../utility/AppError";
 import httpStatus from "http-status";
 
+const getSubscription = async (userId: string) => {
+  const subscriptions = await prisma.subscription.findMany({
+    where: {
+      userId,
+    },
+  });
+  return subscriptions;
+};
+
 const createSubscription = async (userID: string) => {
   const transactionResult = await prisma.$transaction(
     async (tx) => {
@@ -262,7 +271,7 @@ const createSubscriptionCallback = async (query: Record<string, any>) => {
         });
 
         return {
-          redirectUrl: `${config.frontend_url}/dashboard/my-subscriptions?status=success`,
+          redirectUrl: `${config.frontend_url}/dashboard/customer/subscription/success?status=success`,
         };
       } else if (status === "failure") {
         await tx.payment.update({
@@ -277,7 +286,7 @@ const createSubscriptionCallback = async (query: Record<string, any>) => {
         });
 
         return {
-          redirectUrl: `${config.frontend_url}/dashboard/my-subscriptions?status=failure`,
+          redirectUrl: `${config.frontend_url}/dashboard/customer/subscription/failed?status=failure`,
         };
       } else if (status === "cancel") {
         await tx.payment.update({
@@ -295,7 +304,7 @@ const createSubscriptionCallback = async (query: Record<string, any>) => {
         };
       } else {
         return {
-          redirectUrl: `${config.frontend_url}/dashboard/my-subscriptions?error=payment-failed`,
+          redirectUrl: `${config.frontend_url}/dashboard/customer/subscription/failed?error=payment-failed`,
         };
       }
     },
@@ -306,6 +315,7 @@ const createSubscriptionCallback = async (query: Record<string, any>) => {
 };
 
 export const subscriptionService = {
+  getSubscription,
   createSubscription,
   payForSubscription,
   createSubscriptionCallback,

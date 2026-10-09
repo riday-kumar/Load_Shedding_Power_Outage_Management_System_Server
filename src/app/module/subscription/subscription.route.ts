@@ -4,6 +4,9 @@ import { Role } from "../../../generated/prisma/enums";
 import { subscriptionController } from "./subscription.controller";
 
 const router = Router();
+
+router.get("/", auth(Role.CUSTOMER), subscriptionController.getSubscription);
+
 router.post(
   "/",
   auth(Role.CUSTOMER),
