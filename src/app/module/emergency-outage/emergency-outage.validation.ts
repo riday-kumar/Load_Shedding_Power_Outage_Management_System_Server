@@ -5,7 +5,7 @@ const CreateEmergencyOutageSchema = z.object({
 
   reason: z.string().optional(),
 
-  startedAt: z.string().min(1, "Start date is required"),
+  // startedAt: z.ZodISODateTime,
 });
 
 export const emergencyOutageValidation = {
