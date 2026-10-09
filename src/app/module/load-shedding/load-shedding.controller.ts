@@ -6,13 +6,28 @@ import httpStatus from "http-status";
 
 const getLoadSheddingSchedule = catchAsync(
   async (req: Request, res: Response) => {
+    const query = req.query;
     const allLoadSheddingSchedule =
-      await loadSheddingService.getLoadSheddingSchedule();
+      await loadSheddingService.getLoadSheddingSchedule(query);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: "Load shedding schedule retrieved successfully",
       data: allLoadSheddingSchedule,
+    });
+  },
+);
+
+const getFeedersForPowerOperators = catchAsync(
+  async (req: Request, res: Response) => {
+    const userId = req.user?.userId as string;
+    const allFeeders =
+      await loadSheddingService.getAllFeedersForPowerOperators(userId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Same Substations Feeders retrieved successfully",
+      data: allFeeders,
     });
   },
 );
@@ -119,6 +134,7 @@ const deleteLoadSheddingSchedule = catchAsync(
 
 export const loadSheddingController = {
   getLoadSheddingSchedule,
+  getFeedersForPowerOperators,
   createLoadSheddingSchedule,
   approveSchedule,
   rejectSchedule,

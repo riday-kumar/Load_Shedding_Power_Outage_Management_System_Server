@@ -17,6 +17,12 @@ const profile = async (userId: string) => {
     },
     include: {
       distributorManager: true,
+      powerOperators: {
+        select: {
+          id: true,
+          substation_id: true,
+        },
+      },
     },
   });
 

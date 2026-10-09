@@ -7,11 +7,39 @@ import config from "../../config";
 import ejs from "ejs";
 import path from "path";
 import { transporter } from "../../lib/nodemailer";
+import { LoadSheddingScheduleWhereInput } from "../../../generated/prisma/models";
 
-const getLoadSheddingSchedule = async () => {
+export interface IGetLoadSheddingSchedule extends LoadSheddingScheduleWhereInput {
+  state?: LoadSheddingStatus;
+  operator?: string;
+}
+
+const getLoadSheddingSchedule = async (query: IGetLoadSheddingSchedule) => {
+  const andCondition: LoadSheddingScheduleWhereInput[] = [];
+
+  if (query.state) {
+    andCondition.push({
+      OR: [
+        {
+          status: query.state,
+        },
+      ],
+    });
+  }
+
+  if (query.operator) {
+    andCondition.push({
+      OR: [
+        {
+          powerOperator_id: query.operator,
+        },
+      ],
+    });
+  }
+
   const allLoadSheddingSchedule = await prisma.loadSheddingSchedule.findMany({
     where: {
-      status: LoadSheddingStatus.PUBLISHED,
+      AND: andCondition,
     },
     include: {
       feeders: true,
@@ -19,6 +47,26 @@ const getLoadSheddingSchedule = async () => {
     },
   });
   return allLoadSheddingSchedule;
+};
+
+const getAllFeedersForPowerOperators = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      powerOperators: true,
+    },
+  });
+
+  const substationIdOfPowerOperator = user?.powerOperators?.substation_id;
+
+  const feeders = await prisma.feeder.findMany({
+    where: {
+      substation_id: substationIdOfPowerOperator,
+    },
+  });
+  return feeders;
 };
 
 const createLoadSheddingSchedule = async (
@@ -30,22 +78,28 @@ const createLoadSheddingSchedule = async (
 
   const today = new Date();
 
-  const isSameScheduleExists = await prisma.loadSheddingSchedule.findFirst({
-    where: {
-      date: today,
-      feeder_id,
-      start_time: {
-        lt: end_time,
-      },
-      end_time: {
-        gt: start_time,
-      },
-    },
-  });
+  // const isSameScheduleExists = await prisma.loadSheddingSchedule.findFirst({
+  //   where: {
+  //     OR: [
+  //       {
+  //         date: today,
+  //         feeder_id,
+  //         // start_time: {
+  //         //   lt: end_time,
+  //         // },
+  //         // end_time: {
+  //         //   gt: start_time,
+  //         // },
+  //         start_time,
+  //         end_time,
+  //       },
+  //     ],
+  //   },
+  // });
 
-  if (isSameScheduleExists) {
-    throw new AppError(httpStatus.CONFLICT, "Same schedule already exists");
-  }
+  // if (isSameScheduleExists) {
+  //   throw new AppError(httpStatus.CONFLICT, "Same schedule already exists");
+  // }
 
   const getPowerOperator = await prisma.user.findUnique({
     where: {
@@ -247,6 +301,18 @@ const rejectSchedule = async (id: string, userId: string) => {
 };
 
 const publishSchedule = async (id: string, userId: string) => {
+  const formatBDDateTime = (value: Date | string) => {
+    return new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Dhaka",
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }).format(new Date(value));
+  };
+
   const isScheduleExists = await prisma.loadSheddingSchedule.findUnique({
     where: {
       id,
@@ -304,25 +370,19 @@ const publishSchedule = async (id: string, userId: string) => {
 
   const loadSheddingFeeder = isScheduleExists.feeder_id;
 
-  // const feederConnectedUsers = await prisma.feeder.findUnique({
-  //   where : {
-  //     id : loadSheddingFeeder
-  //   }
-  // });
-
   // now we have to send otp Email to the USER
   const templatePath = path.join(
     process.cwd(),
-    "src/app/templates/load-shedding-notification.ejs",
+    "src/app/templates/new-load-shedding.ejs",
   );
 
-  // const templateData = {
-  //   name: name,
-  //   email,
-  //   otp: otp,
-  //   expirationMinutes: "5",
-  // };
-  const html = await ejs.renderFile(templatePath);
+  const emailData = {
+    date: publishSchedule.date.toDateString(),
+    start_time: formatBDDateTime(publishSchedule.start_time),
+    end_time: formatBDDateTime(publishSchedule.end_time),
+  };
+
+  const html = await ejs.renderFile(templatePath, emailData);
 
   const users = await prisma.user.findMany({
     where: {
@@ -424,6 +484,7 @@ const deleteLoadSheddingSchedule = async (id: string) => {
 
 export const loadSheddingService = {
   getLoadSheddingSchedule,
+  getAllFeedersForPowerOperators,
   createLoadSheddingSchedule,
   approveSchedule,
   rejectSchedule,

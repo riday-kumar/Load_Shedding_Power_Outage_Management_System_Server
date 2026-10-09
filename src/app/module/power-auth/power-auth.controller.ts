@@ -49,7 +49,8 @@ const powerDistribution = catchAsync(async (req: Request, res: Response) => {
 
 const getAllPowerDistribution = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await powerAuthServices.allPowerDistribution();
+    const query = req.query;
+    const result = await powerAuthServices.allPowerDistribution(query);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

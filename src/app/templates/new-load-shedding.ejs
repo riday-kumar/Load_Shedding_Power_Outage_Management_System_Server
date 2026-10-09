@@ -1,0 +1,163 @@
+```ejs
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Load Shedding Schedule Notification</title>
+  </head>
+
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f8;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #1f2937;
+    "
+  >
+    <div style="max-width: 600px; margin: 0 auto; padding: 24px 16px">
+      <div
+        style="
+          background-color: #ffffff;
+          border-radius: 12px;
+          overflow: hidden;
+          border: 1px solid #e5e7eb;
+        "
+      >
+        <!-- Header -->
+        <div
+          style="
+            background-color: #1d4ed8;
+            padding: 28px 24px;
+            text-align: center;
+            color: #ffffff;
+          "
+        >
+          <h1 style="margin: 0; font-size: 24px">Load Shedding Notification</h1>
+
+          <p style="margin: 10px 0 0; font-size: 14px; color: #dbeafe">
+            Load Shedding &amp; Power Management System
+          </p>
+        </div>
+
+        <!-- Email Content -->
+        <div style="padding: 28px 24px">
+          <p style="margin: 0 0 16px; font-size: 16px">Dear Customer,</p>
+
+          <p
+            style="
+              margin: 0 0 24px;
+              font-size: 15px;
+              line-height: 1.7;
+              color: #4b5563;
+            "
+          >
+            A load-shedding schedule has been published by the Power Operator.
+            Please check the details below and plan your activities accordingly.
+          </p>
+
+          <!-- Schedule Details -->
+          <div
+            style="
+              background-color: #eff6ff;
+              border: 1px solid #bfdbfe;
+              border-radius: 8px;
+              padding: 20px;
+            "
+          >
+            <h2 style="margin: 0 0 20px; font-size: 18px; color: #1d4ed8">
+              Scheduled Outage Details
+            </h2>
+
+            <p style="margin: 0 0 16px; font-size: 14px; color: #6b7280">
+              Scheduled Date
+              <br />
+              <strong
+                style="
+                  display: inline-block;
+                  margin-top: 6px;
+                  font-size: 17px;
+                  color: #111827;
+                "
+              >
+                <%= date %>
+              </strong>
+            </p>
+
+            <div style="border-top: 1px solid #dbeafe; margin: 16px 0"></div>
+
+            <p style="margin: 0 0 16px; font-size: 14px; color: #6b7280">
+              Power Outage Starts At
+              <br />
+              <strong
+                style="
+                  display: inline-block;
+                  margin-top: 6px;
+                  font-size: 17px;
+                  color: #b91c1c;
+                "
+              >
+                <%= start_time %>
+              </strong>
+            </p>
+
+            <div style="border-top: 1px solid #dbeafe; margin: 16px 0"></div>
+
+            <p style="margin: 0; font-size: 14px; color: #6b7280">
+              Expected Power Restoration
+              <br />
+              <strong
+                style="
+                  display: inline-block;
+                  margin-top: 6px;
+                  font-size: 17px;
+                  color: #15803d;
+                "
+              >
+                <%= end_time %>
+              </strong>
+            </p>
+          </div>
+
+          <p
+            style="
+              margin: 24px 0 0;
+              font-size: 14px;
+              line-height: 1.7;
+              color: #4b5563;
+            "
+          >
+            We apologize for the inconvenience and appreciate your patience.
+            Please note that the schedule may change due to operational
+            requirements.
+          </p>
+
+          <p style="margin: 24px 0 0; font-size: 14px; line-height: 1.6">
+            Best regards,<br />
+            <strong>Power Management Team</strong><br />
+            <span style="color: #6b7280">
+              Load Shedding &amp; Power Management System
+            </span>
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div
+          style="
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            padding: 16px 24px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #6b7280;
+          "
+        >
+          This is an automated notification. Please do not reply to this email.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+```

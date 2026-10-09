@@ -6,10 +6,17 @@ import {
   ICreatePowerDistribution,
   INationalLevelElectricity,
 } from "./power-auth.interface";
-import { NationalPowerStatusWhereInput } from "../../../generated/prisma/models";
+import {
+  NationalPowerStatusWhereInput,
+  PowerDistributionWhereInput,
+} from "../../../generated/prisma/models";
 
 interface IGetNationalElectricityInfo extends NationalPowerStatusWhereInput {
   today?: string;
+}
+interface IDistributionDataInfo extends PowerDistributionWhereInput {
+  today?: string;
+  companyId?: string;
 }
 
 const getNationalLevelElectricity = async (
@@ -82,8 +89,36 @@ const nationalLevelElectricity = async (
   return result;
 };
 
-const allPowerDistribution = async () => {
+const allPowerDistribution = async (query: IDistributionDataInfo) => {
+  const andCondition: IDistributionDataInfo[] = [];
+
+  if (query.today) {
+    const today = new Date();
+
+    const startOfToday = new Date(today);
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const startOfTomorrow = new Date(today);
+    startOfTomorrow.setHours(24, 0, 0, 0);
+
+    andCondition.push({
+      allocatedAt: {
+        gte: startOfToday,
+        lt: startOfTomorrow,
+      },
+    });
+  }
+
+  if (query.companyId) {
+    andCondition.push({
+      distributor_id: query.companyId,
+    });
+  }
+
   const result = await prisma.powerDistribution.findMany({
+    where: {
+      AND: andCondition,
+    },
     orderBy: {
       allocatedAt: "desc",
     },
