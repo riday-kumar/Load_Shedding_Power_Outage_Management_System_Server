@@ -49,6 +49,30 @@ const getLoadSheddingSchedule = async (query: IGetLoadSheddingSchedule) => {
   return allLoadSheddingSchedule;
 };
 
+const getLoadSheddingScheduleForManager = async (userId: string) => {
+  const manager = await prisma.distributorManager.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  const allLoadSheddingSchedule = await prisma.loadSheddingSchedule.findMany({
+    where: {
+      feeders: {
+        manager: {
+          id: manager?.id,
+        },
+      },
+      status: "PENDING",
+    },
+    include: {
+      feeders: true,
+      powerOperator: true,
+    },
+  });
+  return allLoadSheddingSchedule;
+};
+
 const getAllFeedersForPowerOperators = async (userId: string) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -484,6 +508,7 @@ const deleteLoadSheddingSchedule = async (id: string) => {
 
 export const loadSheddingService = {
   getLoadSheddingSchedule,
+  getLoadSheddingScheduleForManager,
   getAllFeedersForPowerOperators,
   createLoadSheddingSchedule,
   approveSchedule,

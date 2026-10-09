@@ -7,6 +7,11 @@ import { LoadSheddingValidationSchema } from "./load-shedding.validation";
 
 const router = Router();
 router.get("/schedule", loadSheddingController.getLoadSheddingSchedule);
+router.get(
+  "/schedule/manager",
+  auth(Role.DISTRIBUTOR_MANAGER),
+  loadSheddingController.getLoadSheddingScheduleForManager,
+);
 
 router.get(
   "/power-operator/feeders",

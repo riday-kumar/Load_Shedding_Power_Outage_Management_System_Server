@@ -18,6 +18,21 @@ const getLoadSheddingSchedule = catchAsync(
   },
 );
 
+const getLoadSheddingScheduleForManager = catchAsync(
+  async (req: Request, res: Response) => {
+    const allLoadSheddingSchedule =
+      await loadSheddingService.getLoadSheddingScheduleForManager(
+        req.user?.userId as string,
+      );
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Load shedding schedule for Manger retrieved successfully",
+      data: allLoadSheddingSchedule,
+    });
+  },
+);
+
 const getFeedersForPowerOperators = catchAsync(
   async (req: Request, res: Response) => {
     const userId = req.user?.userId as string;
@@ -134,6 +149,7 @@ const deleteLoadSheddingSchedule = catchAsync(
 
 export const loadSheddingController = {
   getLoadSheddingSchedule,
+  getLoadSheddingScheduleForManager,
   getFeedersForPowerOperators,
   createLoadSheddingSchedule,
   approveSchedule,
