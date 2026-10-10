@@ -50,21 +50,38 @@ const verifyUserEmail = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const isDev = config.node_env === "development";
+const cookieOptions = {
+  httpOnly: true,
+  secure: !isDev,
+  sameSite: isDev ? ("lax" as const) : ("none" as const),
+  path: "/", // set explicitly so set and clear always match
+};
+
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const result = await authService.loginUser(payload);
   const { accessToken, refreshToken } = result;
 
+  // res.cookie("accessToken", accessToken, {
+  //   httpOnly: true,
+  //   secure: config.node_env === "development" ? false : true,
+  //   sameSite: config.node_env === "development" ? "lax" : "none",
+  //   maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
+  // });
+
   res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: config.node_env === "development" ? false : true,
-    sameSite: config.node_env === "development" ? "lax" : "none",
+    ...cookieOptions,
     maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
   });
+  // res.cookie("refreshToken", refreshToken, {
+  //   httpOnly: true,
+  //   secure: config.node_env === "development" ? false : true,
+  //   sameSite: config.node_env === "development" ? "lax" : "none",
+  //   maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+  // });
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: config.node_env === "development" ? false : true,
-    sameSite: config.node_env === "development" ? "lax" : "none",
+    ...cookieOptions,
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
   });
 
@@ -109,8 +126,8 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 });
 
 const logOut = catchAsync(async (req: Request, res: Response) => {
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
+  res.clearCookie("accessToken", cookieOptions);
+  res.clearCookie("refreshToken", cookieOptions);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
