@@ -50,13 +50,13 @@ const verifyUserEmail = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const isDev = config.node_env === "development";
-const cookieOptions = {
+const getAuthCookieOptions = () => ({
   httpOnly: true,
-  secure: !isDev,
-  sameSite: isDev ? ("lax" as const) : ("none" as const),
-  path: "/", // set explicitly so set and clear always match
-};
+  secure: config.node_env !== "development",
+  sameSite:
+    config.node_env === "development" ? ("lax" as const) : ("none" as const),
+  path: "/",
+});
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -71,8 +71,13 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   // });
 
   res.cookie("accessToken", accessToken, {
-    ...cookieOptions,
-    maxAge: 1000 * 60 * 60 * 24, // 24 hour or 1 day
+    ...getAuthCookieOptions(),
+    maxAge: 1000 * 60 * 60 * 24,
+  });
+
+  res.cookie("refreshToken", refreshToken, {
+    ...getAuthCookieOptions(),
+    maxAge: 1000 * 60 * 60 * 24 * 7,
   });
   // res.cookie("refreshToken", refreshToken, {
   //   httpOnly: true,
@@ -80,10 +85,6 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   //   sameSite: config.node_env === "development" ? "lax" : "none",
   //   maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
   // });
-  res.cookie("refreshToken", refreshToken, {
-    ...cookieOptions,
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-  });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -126,8 +127,8 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
 });
 
 const logOut = catchAsync(async (req: Request, res: Response) => {
-  res.clearCookie("accessToken", cookieOptions);
-  res.clearCookie("refreshToken", cookieOptions);
+  res.clearCookie("accessToken", getAuthCookieOptions());
+  res.clearCookie("refreshToken", getAuthCookieOptions());
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
